@@ -12,7 +12,7 @@ namespace kn
 
 		void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-		void toggleWireframe(bool mode);
+		void toggleWireframe();
 
 		GLFWwindow* getWindow();
 	}

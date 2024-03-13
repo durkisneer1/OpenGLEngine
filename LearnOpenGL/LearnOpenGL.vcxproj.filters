@@ -51,7 +51,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Users\Derrick Martinez\Pictures\wall.jpg">
+    <Image Include="wall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="awesomeface.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

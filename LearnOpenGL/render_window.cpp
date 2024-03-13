@@ -8,6 +8,7 @@ namespace kn
     namespace window
     {
         static GLFWwindow* _window;
+        static bool _wireframeMode;
 
         int init(int screenWidth, int screenHeight, const std::string& windowTitle)
         {
@@ -42,15 +43,16 @@ namespace kn
             glViewport(0, 0, width, height);
         }
 
-        void toggleWireframe(bool mode)
+        void toggleWireframe()
         {
-            if (mode)
+            _wireframeMode = !(_wireframeMode);
+            if (_wireframeMode)
             {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Only rendering indices
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             }
             else
             {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Defeault rendering mode
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
         }
 

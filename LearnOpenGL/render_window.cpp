@@ -1,4 +1,8 @@
 #include "RenderWindow.hpp"
+#include "stb_image.h"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include <iostream>
 
@@ -60,7 +64,7 @@ namespace kn
             }
         }
 
-        GLFWwindow* getWindow()
+        GLFWwindow* get()
         {
             return _window;
         }

@@ -1,7 +1,7 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include <string>
+
+
+struct GLFWwindow;
 
 
 namespace kn
@@ -14,6 +14,6 @@ namespace kn
 
 		void toggleWireframe();
 
-		GLFWwindow* getWindow();
+		GLFWwindow* get();
 	}
 }

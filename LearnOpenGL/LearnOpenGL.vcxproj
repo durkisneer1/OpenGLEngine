@@ -137,11 +137,13 @@
     <ClCompile Include="render_window.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="texture_cache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderWindow.hpp" />
     <ClInclude Include="Shader.hpp" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TextureCache.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />

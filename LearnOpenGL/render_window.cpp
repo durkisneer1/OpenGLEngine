@@ -8,7 +8,8 @@ namespace kn
     namespace window
     {
         static GLFWwindow* _window;
-        static bool _wireframeMode;
+        static bool _wireframeMode = false;
+        static bool _zBufferMode = true;
 
         int init(int screenWidth, int screenHeight, const std::string& windowTitle)
         {
@@ -36,6 +37,9 @@ namespace kn
                 std::cout << "Failed to initialize GLAD" << std::endl;
                 return -1;
             }
+
+            // Enable OpenGL Z-Buffer
+            glEnable(GL_DEPTH_TEST);
         }
 
         void framebufferSizeCallback(GLFWwindow* window, int width, int height)

@@ -132,7 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Users\Derrick Martinez\Downloads\glad\src\glad.c" />
+    <ClCompile Include="C:\OpenGL\include\glad\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="render_window.cpp" />
     <ClCompile Include="shader.cpp" />

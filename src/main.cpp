@@ -1,6 +1,8 @@
 #include "RenderWindow.hpp"
 #include "Shader.hpp"
 #include "TextureCache.hpp"
+#include "Camera.hpp"
+
 #include "stb_image.h"
 
 #include <glad/glad.h>
@@ -11,21 +13,36 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include <vector>
 
 
-const unsigned int SCR_WIDTH = 960;
-const unsigned int SCR_HEIGHT = 540;
+void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+void processInput(GLFWwindow* window);
+
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+kn::Camera camera(glm::vec3(0.0f, 0.0f, -10.0f));
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+bool firstMouse = true;
+
+float deltaTime = 0.0f;
 
 
 int main()
 {
     kn::window::init(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL");
+    glfwSetFramebufferSizeCallback(kn::window::get(), framebufferSizeCallback);
+    glfwSetCursorPosCallback(kn::window::get(), cursorPosCallback);
+
     stbi_set_flip_vertically_on_load(true);
 
-    auto texture = kn::loadTexture("container.jpg");
-    auto texture2 = kn::loadTexture("awesomeface.png");
+    auto texture = kn::loadTexture("assets/cat_grip.jpg");
+    auto texture2 = kn::loadTexture("assets/close_cat.jpg");
 
-    Shader shader("shader.vert", "shader.frag");
+    Shader shader("shaders/shader.vert", "shaders/shader.frag");
 
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -71,19 +88,19 @@ int main()
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-    glm::vec3 cubePositions[] = {
-        glm::vec3(0.0f,  0.0f,  0.0f),
-        glm::vec3(2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3(2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3(1.3f, -2.0f, -2.5f),
-        glm::vec3(1.5f,  2.0f, -2.5f),
-        glm::vec3(1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
+    std::vector<glm::vec3> cubePositions;
+    for (int y = 0; y < 20; y += 2)
+    {
+        for (int x = 0; x < 20; x += 2)
+        {
+            for (int z = 0; z < 20; z += 2)
+            {
+                cubePositions.push_back(glm::vec3(x, y, z));
+            }
+        }
+    }
 
+    // ------------------------------------------------------------
     unsigned int VAO, VBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -102,33 +119,26 @@ int main()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);  // Deactivate VBO
     glBindVertexArray(0);  // Deactivate VAO
+    // ------------------------------------------------------------
 
     shader.use();
     shader.setInt("texture1", 0);
     shader.setInt("texture2", 1);
 
-    glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));  // Conceptual "Camera"
-
-    glm::mat4 projection = glm::perspective(glm::radians(75.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);  // Conceptual "Camera Settings"
+    glm::mat4 projection = glm::perspective(glm::radians(75.0f), (float)kn::window::getWidth() / (float)kn::window::getHeight(), 0.1f, 100.0f);  // Conceptual "Camera Settings"
 
     while (!glfwWindowShouldClose(kn::window::get()))
     {
-        if (glfwGetKey(kn::window::get(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        {
-            glfwSetWindowShouldClose(kn::window::get(), true);
-        }
+        deltaTime = kn::window::tick();
+
+        processInput(kn::window::get());
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         shader.use();
-
-        int viewLoc = glGetUniformLocation(shader.ID, "view");
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-        int projectionLoc = glGetUniformLocation(shader.ID, "projection");
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        shader.setMat4("view", camera.getViewMatrix());
+        shader.setMat4("projection", projection);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -136,15 +146,27 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         glBindVertexArray(VAO);
-        for (unsigned int i = 0; i < 10; i++)
+        for (unsigned int i = 0; i < cubePositions.size(); i++)
         {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             if (i % 3 == 0)
             {
-                angle = glfwGetTime() * 25.0f;
+                angle = (float)glfwGetTime() * 20.0f;
             }
+
+            if (i % 2 == 0)
+            {
+                float fade = (-cos((float)glfwGetTime()) + 1) / 2;
+                shader.setFloat("fade", fade);
+            }
+            else
+            {
+                float fade = (cos((float)glfwGetTime()) + 1) / 2;
+                shader.setFloat("fade", fade);
+            }
+
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             shader.setMat4("model", model);
 
@@ -161,4 +183,48 @@ int main()
 
     glfwTerminate();
     return 0;
+}
+
+
+void processInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.processKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.processKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.processKeyboard(RIGHT, deltaTime);
+}
+
+
+void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+
+void cursorPosCallback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.processMouse(xoffset, yoffset);
 }

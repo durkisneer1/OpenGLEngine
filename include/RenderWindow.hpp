@@ -1,3 +1,5 @@
+#include <glm/glm.hpp>
+
 #include <string>
 
 
@@ -10,10 +12,14 @@ namespace kn
 	{
 		int init(int screenWidth, int screenHeight, const std::string& windowTitle);
 
-		void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-
 		void toggleWireframe();
 
+		float tick();
+
 		GLFWwindow* get();
+
+		int getWidth();
+
+		int getHeight();
 	}
 }

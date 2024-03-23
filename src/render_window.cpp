@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <iostream>
 
 
@@ -14,6 +16,9 @@ namespace kn
         static GLFWwindow* _window;
         static bool _wireframeMode = false;
         static bool _zBufferMode = true;
+
+        static float _deltaTime = 0.0f;
+        static float _lastFrame = 0.0f;
 
         int init(int screenWidth, int screenHeight, const std::string& windowTitle)
         {
@@ -32,9 +37,6 @@ namespace kn
             }
             glfwMakeContextCurrent(_window);
 
-            // Update frame buffer if window is resized
-            glfwSetFramebufferSizeCallback(_window, framebufferSizeCallback);
-
             // Load OpenGL Function Pointers
             if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
             {
@@ -44,11 +46,34 @@ namespace kn
 
             // Enable OpenGL Z-Buffer
             glEnable(GL_DEPTH_TEST);
+            glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
 
         void framebufferSizeCallback(GLFWwindow* window, int width, int height)
         {
             glViewport(0, 0, width, height);
+        }
+
+        float tick()
+        {
+            float currentFrame = static_cast<float>(glfwGetTime());
+            _deltaTime = currentFrame - _lastFrame;
+            _lastFrame = currentFrame;
+            return _deltaTime;
+        }
+
+        int getWidth()
+        {
+            int vpSize[4];
+            glGetIntegerv(GL_VIEWPORT, vpSize);
+            return vpSize[2];
+        }
+
+        int getHeight()
+        {
+            int vpSize[4];
+            glGetIntegerv(GL_VIEWPORT, vpSize);
+            return vpSize[3];
         }
 
         void toggleWireframe()

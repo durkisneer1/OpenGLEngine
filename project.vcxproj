@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e8d8bb80-a7e8-424a-af44-c3ab5abadbad}</ProjectGuid>
-    <RootNamespace>LearnOpenGL</RootNamespace>
+    <ProjectGuid>{3001c2f2-b01e-4bd5-ae91-f8ede10c2f44}</ProjectGuid>
+    <RootNamespace>project</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Kraken Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,7 +72,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\OpenGL\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Code\c++\KrakenGL\include;C:\OpenGL\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\OpenGL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -133,26 +134,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="C:\OpenGL\include\glad\glad.c" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="render_window.cpp" />
-    <ClCompile Include="shader.cpp" />
-    <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="texture_cache.cpp" />
+    <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\render_window.cpp" />
+    <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\stb_image.cpp" />
+    <ClCompile Include="src\texture_cache.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RenderWindow.hpp" />
-    <ClInclude Include="Shader.hpp" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="TextureCache.hpp" />
+    <ClInclude Include="include\Camera.hpp" />
+    <ClInclude Include="include\RenderWindow.hpp" />
+    <ClInclude Include="include\Shader.hpp" />
+    <ClInclude Include="include\stb_image.h" />
+    <ClInclude Include="include\TextureCache.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.frag" />
-    <None Include="shader.vert" />
+    <Image Include="assets\awesomeface.png" />
+    <Image Include="assets\cat_grip.jpg" />
+    <Image Include="assets\close_cat.jpg" />
+    <Image Include="assets\container.jpg" />
+    <Image Include="assets\wall.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="awesomeface.png" />
-    <Image Include="container.jpg" />
-    <Image Include="wall.jpg" />
+    <None Include="shaders\shader.frag" />
+    <None Include="shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

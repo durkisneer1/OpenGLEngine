@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="C:\OpenGL\include\glad\glad.c" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\clock.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\render_window.cpp" />
     <ClCompile Include="src\shader.cpp" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.hpp" />
+    <ClInclude Include="include\Clock.hpp" />
     <ClInclude Include="include\RenderWindow.hpp" />
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\stb_image.h" />

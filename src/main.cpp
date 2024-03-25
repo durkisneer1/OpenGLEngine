@@ -2,6 +2,7 @@
 #include "Shader.hpp"
 #include "TextureCache.hpp"
 #include "Camera.hpp"
+#include "Clock.hpp"
 
 #include "stb_image.h"
 
@@ -16,10 +17,6 @@
 #include <vector>
 
 
-void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
-void processInput(GLFWwindow* window);
-
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
@@ -28,14 +25,12 @@ float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
-float deltaTime = 0.0f;
-
 
 int main()
 {
     kn::window::init(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL");
-    glfwSetFramebufferSizeCallback(kn::window::get(), framebufferSizeCallback);
-    glfwSetCursorPosCallback(kn::window::get(), cursorPosCallback);
+    GLFWwindow* window = kn::window::get();
+    kn::Clock clock;
 
     stbi_set_flip_vertically_on_load(true);
 
@@ -127,11 +122,23 @@ int main()
 
     glm::mat4 projection = glm::perspective(glm::radians(75.0f), (float)kn::window::getWidth() / (float)kn::window::getHeight(), 0.1f, 100.0f);  // Conceptual "Camera Settings"
 
-    while (!glfwWindowShouldClose(kn::window::get()))
+    while (!glfwWindowShouldClose(window))
     {
-        deltaTime = kn::window::tick();
+        double deltaTime = clock.tick();
 
-        processInput(kn::window::get());
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, true);
+
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            camera.processKeyboard(FORWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            camera.processKeyboard(BACKWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            camera.processKeyboard(LEFT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            camera.processKeyboard(RIGHT, deltaTime);
+
+        camera.processMouse();
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -173,7 +180,7 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        glfwSwapBuffers(kn::window::get());
+        glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
@@ -183,48 +190,4 @@ int main()
 
     glfwTerminate();
     return 0;
-}
-
-
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.processKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.processKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.processKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.processKeyboard(RIGHT, deltaTime);
-}
-
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
-
-void cursorPosCallback(GLFWwindow* window, double xposIn, double yposIn)
-{
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
-
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
-
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.processMouse(xoffset, yoffset);
 }

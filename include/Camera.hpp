@@ -45,10 +45,14 @@ namespace kn
 		~Camera() = default;
 
 		glm::mat4 getViewMatrix() const;
-		void processKeyboard(CameraMovement direction, float deltaTime);
-		void processMouse(float xOffset, float yOffset);
+		void processKeyboard(CameraMovement direction, double deltaTime);
+		void processMouse();
 		
 	private:
 		void updateVectors();
+
+		double mousePosX, mousePosY;
+		double lastMousePosX, lastMousePosY;
+		bool firstMouse = true;;
 	};
 }

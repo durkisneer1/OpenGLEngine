@@ -15,10 +15,6 @@ namespace kn
     {
         static GLFWwindow* _window;
         static bool _wireframeMode = false;
-        static bool _zBufferMode = true;
-
-        static float _deltaTime = 0.0f;
-        static float _lastFrame = 0.0f;
 
         int init(int screenWidth, int screenHeight, const std::string& windowTitle)
         {
@@ -47,19 +43,12 @@ namespace kn
             // Enable OpenGL Z-Buffer
             glEnable(GL_DEPTH_TEST);
             glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetFramebufferSizeCallback(kn::window::get(), _framebufferSizeCallback);
         }
 
         void framebufferSizeCallback(GLFWwindow* window, int width, int height)
         {
             glViewport(0, 0, width, height);
-        }
-
-        float tick()
-        {
-            float currentFrame = static_cast<float>(glfwGetTime());
-            _deltaTime = currentFrame - _lastFrame;
-            _lastFrame = currentFrame;
-            return _deltaTime;
         }
 
         int getWidth()
@@ -74,6 +63,11 @@ namespace kn
             int vpSize[4];
             glGetIntegerv(GL_VIEWPORT, vpSize);
             return vpSize[3];
+        }
+
+        void _framebufferSizeCallback(GLFWwindow* window, int width, int height)
+        {
+            glViewport(0, 0, width, height);
         }
 
         void toggleWireframe()

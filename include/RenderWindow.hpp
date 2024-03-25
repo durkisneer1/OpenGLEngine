@@ -14,12 +14,12 @@ namespace kn
 
 		void toggleWireframe();
 
-		float tick();
-
 		GLFWwindow* get();
 
 		int getWidth();
 
 		int getHeight();
+
+		void _framebufferSizeCallback(GLFWwindow* window, int width, int height);
 	}
 }

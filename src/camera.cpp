@@ -44,9 +44,9 @@ glm::mat4 Camera::getViewMatrix() const
 	return glm::lookAt(position, position + front, up);
 }
 
-void Camera::processKeyboard(CameraMovement direction, float deltaTime)
+void Camera::processKeyboard(CameraMovement direction, double deltaTime)
 {
-	float velocity = speed * deltaTime;
+	float velocity = speed * static_cast<float>(deltaTime);
 	if (direction == FORWARD)
 		position += front * velocity;
 	if (direction == BACKWARD)
@@ -57,10 +57,22 @@ void Camera::processKeyboard(CameraMovement direction, float deltaTime)
 		position += right * velocity;
 }
 
-void Camera::processMouse(float xOffset, float yOffset)
+void Camera::processMouse()
 {
-	xOffset *= sensitivity;
-	yOffset *= sensitivity;
+	glfwGetCursorPos(window::get(), &mousePosX, &mousePosY);
+
+	if (firstMouse)
+	{
+		lastMousePosX = mousePosX;
+		lastMousePosY = mousePosY;
+		firstMouse = false;
+	}
+
+	float xOffset = static_cast<float>(mousePosX - lastMousePosX) * sensitivity;
+	float yOffset = static_cast<float>(lastMousePosY - mousePosY) * sensitivity;
+
+	lastMousePosX = mousePosX;
+	lastMousePosY = mousePosY;
 
 	yaw += xOffset;
 	pitch += yOffset;

@@ -36,6 +36,9 @@
     <ClCompile Include="C:\OpenGL\include\glad\glad.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\clock.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.hpp">
@@ -51,6 +54,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\TextureCache.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Clock.hpp">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

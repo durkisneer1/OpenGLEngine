@@ -20,17 +20,13 @@
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-kn::Camera camera(glm::vec3(0.0f, 0.0f, -10.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
-
 
 int main()
 {
     kn::window::init(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL");
     GLFWwindow* window = kn::window::get();
     kn::Clock clock;
+    kn::Camera camera(glm::vec3(0.0f, 0.0f, -10.0f));
 
     stbi_set_flip_vertically_on_load(true);
 

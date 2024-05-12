@@ -2,57 +2,30 @@
 
 #include <glm/glm.hpp>
 
-enum CameraMovement
-{
-	FORWARD,
-	BACKWARD,
-	LEFT,
-	RIGHT
-};
-
-const float YAW = -90.0f;
-const float PITCH = 0.0f;
-const float SPEED = 2.5f;
-const float SENSITIVITY = 0.1f;
-
-
 namespace kn
 {
-	class Camera {
-	public:
-		glm::vec3 position;
-		glm::vec3 front;
-		glm::vec3 up;
-		glm::vec3 right;
-		glm::vec3 worldUp;
 
-		float yaw;
-		float pitch;
+class Camera {
+public:
+    glm::vec3 pos;
+    glm::vec3 front = { 0.0f, 0.0f, -1.0f };
+    glm::vec3 up = { 0.0f, 1.0f, 0.0f };
+    glm::vec3 right;
+    glm::vec3 worldUp = { 0.0f, 1.0f, 0.0f };
 
-		float speed;
-		float sensitivity;
+    float yaw = -90.0f;
+    float pitch = 0.0f;
+    float speed = 2.5f;
+    float sens = 0.1f;
 
-		Camera(
-			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
-			float yaw = YAW, float pitch = PITCH
-		);
-		Camera(
-			float posX, float posY, float posZ,
-			float upX, float upY, float upZ,
-			float yaw, float pitch
-		);
-		~Camera() = default;
+    Camera(glm::vec3 pos, float fov);
+    ~Camera() = default;
 
-		glm::mat4 getViewMatrix() const;
-		void processKeyboard(CameraMovement direction, double deltaTime);
-		void processMouse();
-		
-	private:
-		void updateVectors();
+    void update(double deltaTime, const glm::vec2& movementVec);
+    void look();
 
-		double mousePosX, mousePosY;
-		double lastMousePosX, lastMousePosY;
-		bool firstMouse = true;;
-	};
-}
+private:
+	void updateVectors();
+};
+
+}  // namespace kn

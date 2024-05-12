@@ -3,20 +3,31 @@
 #include <glm/glm.hpp>
 
 #include <string>
+#include <memory>
 
-
-class Shader
+namespace kn
 {
-public:
+namespace shader
+{
+
+struct Shader
+{
 	unsigned int ID;
 
-	Shader(const char* vertexPath, const char* fragmentPath);
 	void use();
-	void free();
-
-	// Utility uniform functions
-	void setBool(const std::string& name, bool value) const;
-	void setInt(const std::string& name, int value) const;
-	void setFloat(const std::string& name, float value) const;
-	void setMat4(const std::string& name, glm::mat4 value) const;
+	void setBool(const std::string &name, bool value) const;
+	void setInt(const std::string &name, int value) const;
+	void setFloat(const std::string &name, float value) const;
+	void setMat4(const std::string &name, const glm::mat4 &value) const;
 };
+
+std::shared_ptr<Shader> load(const std::string& dirPath, const std::string& shaderName);
+
+void releaseAll();
+
+void release(const std::string shaderName);
+
+std::shared_ptr<Shader> get(const std::string& shaderName);
+
+}  // namespace shader
+}  // namespace kn

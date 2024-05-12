@@ -1,0 +1,1 @@
+sources = ['src/camera.cpp', 'src/cube.cpp', 'src/input.cpp', 'src/shader.cpp', 'src/time.cpp', 'src/window.cpp']

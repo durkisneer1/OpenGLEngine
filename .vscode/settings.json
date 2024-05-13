@@ -1,6 +1,6 @@
 {
     "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
-    "C_Cpp.default.compileCommands": "d:\\Code\\c++\\meson-test\\builddir/compile_commands.json",
+    "C_Cpp.default.compileCommands": "d:\\Code\\c++\\OpenGL-Kraken\\builddir/compile_commands.json",
     "files.associations": {
         "iostream": "cpp",
         "algorithm": "cpp",

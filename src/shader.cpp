@@ -40,9 +40,9 @@ std::shared_ptr<Shader> get(const std::string& shaderName)
 
 std::shared_ptr<Shader> load(const std::string& dirPath, const std::string& shaderName)
 {
-    auto i = shaderMap.find(shaderName);
-    if (i != shaderMap.end())
-        return i->second;
+    auto it = shaderMap.find(shaderName);
+    if (it != shaderMap.end())
+        return it->second;
 
     std::string vertexCode;
     std::string fragmentCode;
@@ -122,7 +122,7 @@ std::shared_ptr<Shader> load(const std::string& dirPath, const std::string& shad
     glDeleteShader(fragment);
 
     std::shared_ptr<Shader> shaderPtr = std::make_shared<Shader>(shader);
-    shaderMap[shaderName] = shaderPtr;
+    shaderMap[std::move(shaderName)] = shaderPtr;
 
     return shaderPtr;
 }

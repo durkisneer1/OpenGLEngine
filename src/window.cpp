@@ -1,5 +1,7 @@
 #include "Window.hpp"
 #include "Shader.hpp"
+#include "BufferObject.hpp"
+#include "VertexArray.hpp"
 
 #include <glad/glad.h>
 #include <stb/stb_image.h>
@@ -106,6 +108,8 @@ void quit()
 
     _events.clear();
     kn::shader::releaseAll();
+    kn::vao::releaseAll();
+    kn::buffer::releaseAll();
 
     if (SDL_WasInit(SDL_INIT_EVERYTHING) & SDL_INIT_EVERYTHING)
         SDL_Quit();

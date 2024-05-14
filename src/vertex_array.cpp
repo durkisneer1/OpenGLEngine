@@ -84,9 +84,8 @@ void release(const std::string& name)
 
 void releaseAll()
 {
-    for (const auto& pair : vaoMap) {
+    for (const auto& pair : vaoMap)
         glDeleteVertexArrays(1, &pair.second);
-    }
     vaoMap.clear();
 }
 

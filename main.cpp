@@ -7,23 +7,24 @@ int main()
     kn::window::init(800, 600, "DurkGL");
     kn::input::setRelativeMode(true);
     kn::time::Clock clock;
-    
-    kn::Camera camera({ -2.0f, 1.5f, -2.0f }, 75.0f);
-    camera.yaw = 45.0f;
-    camera.pitch = -30.0f;
-    kn::Cube cube;
-    kn::Cube purpleCube(
-        { 3.0f, 0.0f, 2.0f },
-        // { 15.0f, 15.0f, 30.0f },
-        { 2.0f, 1.0f, 1.0f },
-        { 255, 0, 255 }
-    );
-    kn::Cube yellowCube(
-        { -3.0f, 2.0f, -1.0f },
-        // { 15.0f, 15.0f, 30.0f },
-        { 0.5f, 1.2f, 4.0f },
-        { 255, 255, 0 }
-    );
+
+    kn::Camera camera({ 3.0f, 3.0f, 6.0f }, 75.0f);
+    camera.yaw = 270.0f;
+    camera.pitch = -35.0f;
+
+    auto texture = kn::texture::load("cat", "../assets/close_cat.jpg");
+    kn::Cube texturedCube(texture);
+
+    kn::Cube purpleCube;
+    purpleCube.color = { 1.0f, 0.0f, 1.0f };
+    purpleCube.pos = { 3.0f, 0.0f, 2.0f };
+    purpleCube.scale = { 2.0f, 0.5f, 1.0f };
+
+    kn::Cube yellowCube;
+    yellowCube.color = { 1.0f, 1.0f, 0.0f };
+    yellowCube.rot = { 15.0f, -30.0f, -10.0f };
+    yellowCube.pos = { -3.0f, 2.0f, -1.0f };
+    yellowCube.scale = { 0.5f, 1.2f, 4.0f };
 
     std::vector<kn::KEYS> forward = { kn::S_w, kn::S_UP };
     std::vector<kn::KEYS> right = { kn::S_d, kn::S_RIGHT };
@@ -44,7 +45,7 @@ int main()
         kn::window::cls();
 
         camera.update(deltaTime, inputDir);
-        cube.render();
+        texturedCube.render();
         purpleCube.render();
         yellowCube.render();
 

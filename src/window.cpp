@@ -2,6 +2,7 @@
 #include "Shader.hpp"
 #include "BufferObject.hpp"
 #include "VertexArray.hpp"
+#include "Texture.hpp"
 
 #include <glad/glad.h>
 #include <stb/stb_image.h>
@@ -110,12 +111,13 @@ void quit()
     kn::shader::releaseAll();
     kn::vao::releaseAll();
     kn::buffer::releaseAll();
+    kn::texture::releaseAll();
 
     if (SDL_WasInit(SDL_INIT_EVERYTHING) & SDL_INIT_EVERYTHING)
         SDL_Quit();
 }
 
-void cls(SDL_Color color)
+void cls(Color color)
 {
     glClearColor(
         color.r / 255.0f,

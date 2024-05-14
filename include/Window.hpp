@@ -5,6 +5,8 @@
 
 #include <SDL.h>
 
+#include "Constants.hpp"
+
 
 namespace kn
 {
@@ -23,7 +25,7 @@ void quit();
 
 const std::vector<SDL_Event>& getEvents();
 
-void cls(SDL_Color color = { 20, 20, 20, 255 });
+void cls(Color color = { 20, 20, 20, 255 });
 
 void flip();
 

@@ -38,7 +38,7 @@ void release(const std::string& shaderName)
 }
 
 std::shared_ptr<Shader> get(const std::string& shaderName)
-{
+{   
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end())
         return it->second;

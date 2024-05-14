@@ -71,11 +71,6 @@ Cube::Cube(unsigned int textureID) : texID(textureID)
     );
 
     shaderPtr = shader::get("default");
-    shaderPtr->use();
-    shaderPtr->setBool("useTexture", texID ? true : false);
-    // GLint val;
-    // glGetUniformiv(shaderPtr->ID, glGetUniformLocation(shaderPtr->ID, "useTexture"), &val);
-    // std::cout << val << std::endl;
 }
 
 void Cube::render()
@@ -83,8 +78,15 @@ void Cube::render()
     shaderPtr->use();
     shaderPtr->setVec3("uColor", color);
 
-    if (texID)
+    if (texID != 0)
+    {
+        shaderPtr->setBool("useTexture", true);
         glBindTexture(GL_TEXTURE_2D, texID);
+    }
+    else
+    {
+        shaderPtr->setBool("useTexture", false);
+    }
     glBindVertexArray(VAO);
 
     glm::mat4 model = glm::mat4(1.0f);

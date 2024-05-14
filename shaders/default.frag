@@ -10,7 +10,7 @@ uniform bool useTexture;
 void main()
 {
     if (useTexture)
-        FragColor = texture(tex, TexCoord);
+        FragColor = texture(tex, TexCoord) * vec4(uColor, 1.0);
     else
         FragColor = vec4(uColor, 1.0);
 }

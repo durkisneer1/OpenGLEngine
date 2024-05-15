@@ -36,6 +36,11 @@ void setRelativeMode(bool state)
     SDL_SetRelativeMouseMode(state ? SDL_TRUE : SDL_FALSE);
 }
 
+bool getRelativeMode()
+{
+    return SDL_GetRelativeMouseMode();
+}
+
 glm::vec2 getVector(const std::vector<KEYS>& up, const std::vector<KEYS>& right,
                     const std::vector<KEYS>& down, const std::vector<KEYS>& left)
 {

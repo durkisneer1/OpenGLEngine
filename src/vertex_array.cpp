@@ -52,6 +52,7 @@ unsigned int generate(const std::string& name, const std::vector<AttrData>& attr
                 (void*)(offset * sizeof(float))
             );
             glEnableVertexAttribArray(data.positions.at(i));
+            offset += data.strides.at(i);
         }
     }
         

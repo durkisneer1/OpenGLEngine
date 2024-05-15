@@ -20,8 +20,7 @@ const BufferData& generate(const std::string& name, const std::vector<float>& ar
     unsigned int buffer;
     glGenBuffers(1, &buffer);
 
-    BufferData bufferData = { buffer, &array };
-    bufferMap[std::move(name)] = bufferData;
+    bufferMap[std::move(name)] = BufferData{ buffer, &array };
     return bufferMap[name];
 }
 

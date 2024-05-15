@@ -16,7 +16,8 @@ namespace window {
 static SDL_Window* _window;
 static SDL_GLContext _ctx;
 static bool _wireframeMode = false;
-static SDL_Event _event;
+static bool _running = true;
+static Event _event;
 static std::vector<SDL_Event> _events;
 
 
@@ -37,7 +38,7 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
         windowTitle.c_str(),
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         screenWidth, screenHeight,
-        SDL_WINDOW_OPENGL
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
     );
     if (_window == nullptr)
     {
@@ -63,6 +64,8 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
     stbi_set_flip_vertically_on_load(true);
 
     shader::load("../shaders/", "default");
+
+    SDL_AddEventWatch(updateWindowCallback, nullptr);
 }
 
 const std::vector<SDL_Event>& getEvents()
@@ -102,6 +105,8 @@ int getHeight()
 
 void quit()
 {
+    _running = false;
+
     if (_ctx != nullptr)
         SDL_GL_DeleteContext(_ctx);
     if (_window != nullptr)
@@ -159,6 +164,22 @@ std::string getTitle()
         std::cout << "Cannot get title before creating the window" << std::endl;
 
     return std::string(SDL_GetWindowTitle(_window));
+}
+
+bool isRunning()
+{
+    return _running;
+}
+
+int updateWindowCallback(void* data, Event* e)
+{
+    if (e->type == WINDOWEVENT)
+        if (e->window.event == SDL_WINDOWEVENT_RESIZED)
+            glViewport(0, 0, e->window.data1, e->window.data2);
+    else if (e->type == QUIT)
+        quit();
+        
+    return 0;
 }
 
 }  // window namespace

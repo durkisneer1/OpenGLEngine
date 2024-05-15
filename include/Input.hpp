@@ -20,6 +20,8 @@ const Uint8* getKeysPressed();
 
 void setRelativeMode(bool state);
 
+bool getRelativeMode();
+
 glm::vec2 getVector(
     const std::vector<KEYS>& up = {}, const std::vector<KEYS>& right = {},
     const std::vector<KEYS>& down = {}, const std::vector<KEYS>& left = {}

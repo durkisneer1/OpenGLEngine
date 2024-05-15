@@ -33,5 +33,9 @@ void setTitle(const std::string& newTitle);
 
 std::string getTitle();
 
-}
-}
+bool isRunning();
+
+int updateWindowCallback(void* data, Event* e);
+
+}  // namespace window
+}  // namespace kn

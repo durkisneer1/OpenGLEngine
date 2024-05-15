@@ -25,7 +25,8 @@ public:
     void look();
 
 private:
-	void updateVectors();
+    float fov;
+    void updateVectors();
 };
 
 }  // namespace kn

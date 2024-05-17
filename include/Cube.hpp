@@ -14,6 +14,8 @@ public:
     glm::vec3 scale = { 1.0f, 1.0f, 1.0f };
     glm::vec3 rot = { 0.0f, 0.0f, 0.0f };
     glm::vec3 color = { 1.0f, 1.0f, 1.0f };
+    glm::vec3 specular = { 0.5f, 0.5f, 0.5f };
+    float gloss = 32.0f;
 
     Cube(unsigned int textureID = 0);
     ~Cube();

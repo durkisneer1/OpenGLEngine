@@ -25,7 +25,7 @@ void quit();
 
 const std::vector<SDL_Event>& getEvents();
 
-void cls(Color color = { 20, 20, 20, 255 });
+void cls(Color color = { 0, 0, 0, 255 });
 
 void flip();
 

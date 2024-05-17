@@ -7,57 +7,56 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/string_cast.hpp>
 
 #include "VertexArray.hpp"
 #include "BufferObject.hpp"
-#include "Texture.hpp"
 
 namespace kn
 {
 
 static const std::vector<float> vertices = {
-    -1.0f, -1.0f, -1.0f,  0.0f, 0.0f,
-    1.0f, -1.0f, -1.0f,  1.0f, 0.0f,
-    1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
-    1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
-    -1.0f,  1.0f, -1.0f,  0.0f, 1.0f,
-    -1.0f, -1.0f, -1.0f,  0.0f, 0.0f,
+    // vertices           // normals          // texcoords
+    -1.0f, -1.0f, -1.0f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
+    1.0f, -1.0f, -1.0f,   0.0f, 0.0f, -1.0f,  1.0f, 0.0f,
+    1.0f,  1.0f, -1.0f,   0.0f, 0.0f, -1.0f,  1.0f, 1.0f,
+    1.0f,  1.0f, -1.0f,   0.0f, 0.0f, -1.0f,  1.0f, 1.0f,
+    -1.0f,  1.0f, -1.0f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f,
+    -1.0f, -1.0f, -1.0f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
 
-    -1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
-    1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
-    1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
-    1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
-    -1.0f,  1.0f,  1.0f,  0.0f, 1.0f,
-    -1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
+    -1.0f, -1.0f,  1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+    1.0f, -1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+    1.0f,  1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    1.0f,  1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+    -1.0f,  1.0f,  1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
+    -1.0f, -1.0f,  1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
 
-    -1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-    -1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
-    -1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
-    -1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
-    -1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
-    -1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+    -1.0f, 1.0f, 1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
+    -1.0f, 1.0f, -1.0f,   -1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+    -1.0f, -1.0f, -1.0f,  -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+    -1.0f, -1.0f, -1.0f,  -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+    -1.0f, -1.0f, 1.0f,   -1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    -1.0f, 1.0f, 1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
 
-    1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-    1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
-    1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
-    1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
-    1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
-    1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+    1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
+    1.0f, 1.0f, -1.0f,   1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+    1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+    1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+    1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+    1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
 
-    -1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
-    1.0f, -1.0f, -1.0f,  1.0f, 1.0f,
-    1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
-    1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
-    -1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
-    -1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
+    -1.0f, -1.0f, -1.0f,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f,
+    1.0f, -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,  1.0f, 1.0f,
+    1.0f, -1.0f, 1.0f,    0.0f, -1.0f, 0.0f,  1.0f, 0.0f,
+    1.0f, -1.0f, 1.0f,    0.0f, -1.0f, 0.0f,  1.0f, 0.0f,
+    -1.0f, -1.0f, 1.0f,   0.0f, -1.0f, 0.0f,  0.0f, 0.0f,
+    -1.0f, -1.0f, -1.0f,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f,
 
-    -1.0f,  1.0f, -1.0f,  0.0f, 1.0f,
-    1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
-    1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-    1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-    -1.0f,  1.0f,  1.0f,  0.0f, 0.0f,
-    -1.0f,  1.0f, -1.0f,  0.0f, 1.0f
+    -1.0f, 1.0f, -1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+    1.0f, 1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f,
+    -1.0f, 1.0f, -1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f
 };
 
 Cube::Cube(unsigned int textureID) : texID(textureID)
@@ -66,7 +65,7 @@ Cube::Cube(unsigned int textureID) : texID(textureID)
     VAO = kn::vao::generate(
         "cube",
         {
-            { VBO, { 3, 2 }, { 0, 1 } }
+            { VBO, { 3, 3, 2 }, { 0, 1, 2 } }
         }
     );
 
@@ -76,8 +75,11 @@ Cube::Cube(unsigned int textureID) : texID(textureID)
 void Cube::render()
 {
     shaderPtr->use();
-    shaderPtr->setVec3("uColor", color);
-
+    shaderPtr->setVec3("material.diffuse", color);
+    shaderPtr->setVec3("material.ambient", color);
+    shaderPtr->setVec3("material.specular", specular);
+    shaderPtr->setFloat("material.gloss", gloss);
+    
     if (texID != 0)
     {
         shaderPtr->setBool("useTexture", true);

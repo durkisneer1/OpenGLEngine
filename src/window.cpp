@@ -58,12 +58,11 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
         std::cout << "Failed to initialized GLAD" << std::endl;
 
     glEnable(GL_DEPTH_TEST);
-    // glEnable(GL_CULL_FACE);
     glViewport(0, 0, screenWidth, screenHeight);
 
     stbi_set_flip_vertically_on_load(true);
 
-    shader::load("../shaders/", "default");
+    auto shaderPtr = shader::load("../shaders/", "default");
 
     SDL_AddEventWatch(updateWindowCallback, nullptr);
 }
@@ -174,10 +173,14 @@ bool isRunning()
 int updateWindowCallback(void* data, Event* e)
 {
     if (e->type == WINDOWEVENT)
+    {
         if (e->window.event == SDL_WINDOWEVENT_RESIZED)
             glViewport(0, 0, e->window.data1, e->window.data2);
+    }
     else if (e->type == QUIT)
+    {
         quit();
+    }
         
     return 0;
 }

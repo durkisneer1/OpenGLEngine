@@ -1,6 +1,7 @@
 #include <KrakenEngine.hpp>
 
 #include <vector>
+#include <iostream>
 
 int main()
 {
@@ -8,20 +9,29 @@ int main()
     kn::input::setRelativeMode(true);
     kn::time::Clock clock;
 
+    auto shaderPtr = kn::shader::get("default");
+    shaderPtr->use();
+    shaderPtr->setVec3("light.position", { 0.0f, 0.0f, 0.0f });
+    shaderPtr->setVec3("light.ambient", { 0.2f, 0.2f, 0.2f });
+    shaderPtr->setVec3("light.diffuse", { 0.5f, 0.5f, 0.5f });
+    shaderPtr->setVec3("light.specular", { 1.0f, 1.0f, 1.0f });
+
     kn::Camera camera({ 3.0f, 3.0f, 6.0f }, 75.0f);
     camera.yaw = 270.0f;
     camera.pitch = -35.0f;
 
-    auto texture = kn::texture::load("cat", "../assets/close_cat.jpg");
+    auto catFace = kn::texture::load("cat face", "../assets/close_cat.jpg");
+    // auto catGrip = kn::texture::load("cat grip", "../assets/cat_grip.jpg");
 
-    kn::Cube whiteCube(texture);
+    kn::Cube whiteCube(catFace);
+    whiteCube.pos = { -2.0f, -0.5f, 2.0f };
 
-    kn::Cube purpleCube(texture);
+    kn::Cube purpleCube;
     purpleCube.color = { 1.0f, 0.0f, 1.0f };
     purpleCube.pos = { 3.0f, 0.0f, 2.0f };
     purpleCube.scale = { 2.0f, 0.5f, 1.0f };
 
-    kn::Cube yellowCube(texture);
+    kn::Cube yellowCube;
     yellowCube.color = { 1.0f, 1.0f, 0.0f };
     yellowCube.rot = { 15.0f, -30.0f, -10.0f };
     yellowCube.pos = { -3.0f, 2.0f, -1.0f };

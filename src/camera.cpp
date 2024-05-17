@@ -33,6 +33,7 @@ void Camera::update(double deltaTime, const glm::vec2& movementVec)
         "projection",
         glm::perspective(glm::radians(fov), (float)window::getWidth() / (float)window::getHeight(), 0.1f, 100.0f)
     );
+    _shaderPtr->setVec3("viewPos", pos);
 }
 
 void Camera::look()

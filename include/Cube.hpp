@@ -13,18 +13,18 @@ public:
     glm::vec3 pos = { 0.0f, 0.0f, 0.0f };
     glm::vec3 scale = { 1.0f, 1.0f, 1.0f };
     glm::vec3 rot = { 0.0f, 0.0f, 0.0f };
-    glm::vec3 color = { 1.0f, 1.0f, 1.0f };
-    glm::vec3 specular = { 0.5f, 0.5f, 0.5f };
     float gloss = 32.0f;
+    unsigned int diffuse = -1;
+    unsigned int specular = -1;
 
-    Cube(unsigned int textureID = 0);
-    ~Cube();
+    Cube();
+    ~Cube() = default;
 
     void render();
 
 private:
     std::shared_ptr<shader::Shader> shaderPtr;
-    unsigned int texID, VAO;
+    unsigned int VAO;
 };
 
 }  // namespace kn

@@ -27,7 +27,6 @@ void Camera::update(double deltaTime, const glm::vec2& movementVec)
     look();
     updateVectors();
 
-    _shaderPtr->use();
     _shaderPtr->setMat4("view", glm::lookAt(pos, pos + front, up));
     _shaderPtr->setMat4(
         "projection",

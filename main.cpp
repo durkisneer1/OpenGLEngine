@@ -11,7 +11,8 @@ int main()
 
     auto shaderPtr = kn::shader::get("default");
     shaderPtr->use();
-    shaderPtr->setVec3("light.position", { 0.0f, 0.0f, 0.0f });
+
+    shaderPtr->setVec3("light.position", { 2.0f, 2.0f, 2.0f });
     shaderPtr->setVec3("light.ambient", { 0.2f, 0.2f, 0.2f });
     shaderPtr->setVec3("light.diffuse", { 0.5f, 0.5f, 0.5f });
     shaderPtr->setVec3("light.specular", { 1.0f, 1.0f, 1.0f });
@@ -20,22 +21,12 @@ int main()
     camera.yaw = 270.0f;
     camera.pitch = -35.0f;
 
-    auto catFace = kn::texture::load("cat face", "../assets/close_cat.jpg");
-    // auto catGrip = kn::texture::load("cat grip", "../assets/cat_grip.jpg");
+    auto boxDiffuse = kn::texture::load("box diffuse", "../assets/container_diffuse.png");
+    auto boxSpecular = kn::texture::load("box specular", "../assets/container_specular.png");
 
-    kn::Cube whiteCube(catFace);
-    whiteCube.pos = { -2.0f, -0.5f, 2.0f };
-
-    kn::Cube purpleCube;
-    purpleCube.color = { 1.0f, 0.0f, 1.0f };
-    purpleCube.pos = { 3.0f, 0.0f, 2.0f };
-    purpleCube.scale = { 2.0f, 0.5f, 1.0f };
-
-    kn::Cube yellowCube;
-    yellowCube.color = { 1.0f, 1.0f, 0.0f };
-    yellowCube.rot = { 15.0f, -30.0f, -10.0f };
-    yellowCube.pos = { -3.0f, 2.0f, -1.0f };
-    yellowCube.scale = { 0.5f, 1.2f, 4.0f };
+    kn::Cube box;
+    box.diffuse = boxDiffuse;
+    box.specular = boxSpecular;
 
     std::vector<kn::KEYS> forward = { kn::S_w, kn::S_UP };
     std::vector<kn::KEYS> right = { kn::S_d, kn::S_RIGHT };
@@ -59,9 +50,15 @@ int main()
 
         kn::window::cls();
 
-        whiteCube.render();
-        purpleCube.render();
-        yellowCube.render();
+        for (int z = 0; z < 10; z++)
+        {
+            for (int x = 0; x < 10; x++)
+            {
+                box.pos.x = x * 2;
+                box.pos.z = z * 2;
+                box.render();
+            }
+        }
 
         kn::window::flip();
     }

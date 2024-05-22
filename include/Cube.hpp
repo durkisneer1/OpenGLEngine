@@ -14,8 +14,8 @@ public:
     glm::vec3 scale = { 1.0f, 1.0f, 1.0f };
     glm::vec3 rot = { 0.0f, 0.0f, 0.0f };
     float gloss = 32.0f;
-    unsigned int diffuse = -1;
-    unsigned int specular = -1;
+    unsigned int diffuse;
+    unsigned int specular;
 
     Cube();
     ~Cube() = default;

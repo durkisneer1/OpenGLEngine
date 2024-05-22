@@ -47,6 +47,32 @@ unsigned int load(const std::string& name, const std::string& path)
     return texID;
 }
 
+unsigned int create(const std::string& name, Color color)
+{
+    auto it = textureMap.find(name);
+    if (it != textureMap.end())
+        return it->second;
+
+    unsigned int texID;
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
+    SDL_FillRect(surface, nullptr, SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
+    if (surface != nullptr)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "KN::TEXTURE::CREATE::FAILED - " << SDL_GetError() << std::endl;
+    }
+
+    textureMap[std::move(name)] = texID;
+    return texID;
+}
+
 unsigned int get(const std::string& name)
 {
     auto it = textureMap.find(name);

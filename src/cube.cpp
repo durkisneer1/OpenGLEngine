@@ -1,4 +1,5 @@
 #include "Cube.hpp"
+#include "Texture.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 
@@ -72,6 +73,8 @@ Cube::Cube()
     shaderPtr = shader::get("default");
     shaderPtr->setInt("material.diffuse", 0);
     shaderPtr->setInt("material.specular", 1);
+    diffuse = texture::get("_k_diffuse_");
+    specular = texture::get("_k_specular_");
 }
 
 void Cube::render()

@@ -62,7 +62,9 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
 
     stbi_set_flip_vertically_on_load(true);
 
-    auto shaderPtr = shader::load("../shaders/", "default");
+    shader::load("../shaders/", "default");
+    texture::create("_k_diffuse_", { 255, 255, 255, 255 });
+    texture::create("_k_specular_", { 0, 0, 0, 255 });
 
     SDL_AddEventWatch(updateWindowCallback, nullptr);
 }

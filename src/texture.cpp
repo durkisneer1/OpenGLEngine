@@ -1,18 +1,18 @@
-#include "Texture.hpp"
-
 #include <map>
 #include <glad/glad.h>
 #include <iostream>
 #include <stb/stb_image.h>
+
+#include "Texture.hpp"
 
 namespace kn
 {
 namespace texture
 {
 
-static std::map<std::string, unsigned int> textureMap;
+static std::map<std::string, std::shared_ptr<Texture>> textureMap;
 
-unsigned int load(const std::string& name, const std::string& path)
+std::shared_ptr<Texture> load(const std::string& name, TextureType textureType, const std::string& path)
 {
     auto it = textureMap.find(name);
     if (it != textureMap.end())
@@ -43,11 +43,13 @@ unsigned int load(const std::string& name, const std::string& path)
     }
     stbi_image_free(data);
 
-    textureMap[std::move(name)] = texID;
-    return texID;
+    Texture texture{texID, textureType};
+    auto texPtr = std::make_shared<Texture>(texture);
+    textureMap[std::move(name)] = texPtr;
+    return texPtr;
 }
 
-unsigned int create(const std::string& name, Color color)
+std::shared_ptr<Texture> create(const std::string& name, TextureType textureType, Color color)
 {
     auto it = textureMap.find(name);
     if (it != textureMap.end())
@@ -66,20 +68,22 @@ unsigned int create(const std::string& name, Color color)
     }
     else
     {
-        std::cout << "KN::TEXTURE::CREATE::FAILED - " << SDL_GetError() << std::endl;
+        std::cout << "KN::TEXTURE::CREATE::FAILED::" << name << std::endl;
     }
 
-    textureMap[std::move(name)] = texID;
-    return texID;
+    Texture texture{texID, textureType};
+    auto texPtr = std::make_shared<Texture>(texture);
+    textureMap[std::move(name)] = texPtr;
+    return texPtr;
 }
 
-unsigned int get(const std::string& name)
+std::shared_ptr<Texture> get(const std::string& name)
 {
     auto it = textureMap.find(name);
     if (it != textureMap.end())
         return it->second;
     else
-        std::cout << "KN::TEXTURE::GET::TEXTURE_NOT_FOUND" << std::endl;
+        std::cout << "KN::TEXTURE::GET::TEXTURE_NOT_FOUND::" << name << std::endl;
 }
 
 void release(const std::string& name)
@@ -87,7 +91,7 @@ void release(const std::string& name)
     auto it = textureMap.find(name);
     if (it != textureMap.end())
     {
-        glDeleteTextures(1, &it->second);
+        glDeleteTextures(1, &it->second->id);
         textureMap.erase(it);
     }
     else
@@ -99,7 +103,7 @@ void release(const std::string& name)
 void releaseAll()
 {
     for (const auto& pair : textureMap)
-        glDeleteTextures(1, &pair.second);
+        glDeleteTextures(1, &pair.second->id);
     textureMap.clear();
 }
 

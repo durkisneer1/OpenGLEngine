@@ -37,6 +37,7 @@ int main(int argc, char **argv)
 
     kn::DirectionalLight sun;
     sun.direction = { -0.3, -1.0, -0.2};
+    sun.diffuse = { 0.1, 0.2, 0.4 };
     sun.update();
 
     shaderPtr->setVec3("spotLight.ambient", { 0.0f, 0.0f, 0.0f });
@@ -48,8 +49,8 @@ int main(int argc, char **argv)
     shaderPtr->setFloat("spotLight.cutOff", glm::cos(glm::radians(30.0f)));
     shaderPtr->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(35.0f)));
 
-    auto boxDiffuse = kn::texture::load("box diffuse", "../assets/container_diffuse.png");
-    auto boxSpecular = kn::texture::load("box specular", "../assets/container_specular.png");
+    auto boxDiffuse = kn::texture::load("box diffuse", kn::DIFFUSE, "../assets/container_diffuse.png");
+    auto boxSpecular = kn::texture::load("box specular", kn::SPECULAR, "../assets/container_specular.png");
 
     kn::Cube box;
     box.diffuse = boxDiffuse;

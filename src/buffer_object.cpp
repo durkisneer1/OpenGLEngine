@@ -11,7 +11,7 @@ namespace buffer
 
 static std::map<std::string, BufferData> bufferMap;
 
-const BufferData& generate(const std::string& name, const std::vector<float>& array)
+const BufferData& generate(const std::string& name, const std::vector<Vertex>& array)
 {
     auto it = bufferMap.find(name);
     if (it != bufferMap.end())
@@ -34,7 +34,7 @@ const BufferData& get(const std::string& name)
     }
     else
     {
-        std::cout << "KN::BUFFER::GET::BUFFER_NONEXISTENT" << std::endl;
+        std::cout << "KN::BUFFER::GET::KEY_NOT_FOUND::" << name << std::endl;
     }
 }
 
@@ -44,7 +44,7 @@ void release(const std::string& name)
     if (it != bufferMap.end())
         bufferMap.erase(it);
     else
-        std::cout << "KN::BUFFER::RELEASE::KEY_NOT_FOUND" << std::endl;
+        std::cout << "KN::BUFFER::RELEASE::KEY_NOT_FOUND::" << name << std::endl;
 }
 
 void releaseAll()

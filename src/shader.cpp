@@ -129,7 +129,7 @@ std::shared_ptr<Shader> load(const std::string& dirPath, const std::string& shad
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
-    std::shared_ptr<Shader> shaderPtr = std::make_shared<Shader>(shader);
+    auto shaderPtr = std::make_shared<Shader>(shader);
     shaderMap[std::move(shaderName)] = shaderPtr;
 
     return shaderPtr;

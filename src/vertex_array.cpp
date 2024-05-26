@@ -1,7 +1,8 @@
-#include "VertexArray.hpp"
 #include <map>
 #include <iostream>
 #include <glad/glad.h>
+
+#include "VertexArray.hpp"
 
 namespace kn
 {
@@ -10,7 +11,7 @@ namespace vao
 
 static std::map<std::string, unsigned int> vaoMap;
 
-unsigned int generate(const std::string& name, const std::vector<AttrData>& attrDatas)
+unsigned int generate(const std::string& name, const std::vector<buffer::BufferData>& bufferDatas)
 {
     auto it = vaoMap.find(name);
     if (it != vaoMap.end())
@@ -20,40 +21,22 @@ unsigned int generate(const std::string& name, const std::vector<AttrData>& attr
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    for (const AttrData& data : attrDatas)
+    for (const buffer::BufferData& data : bufferDatas)
     {
-        if (data.positions.size() != data.strides.size())
-        {
-            std::cout << "KN::VAO::GENERATE::ATTR_DATA_MISMATCH" << std::endl;
-            return 0;
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, data.bufferData.ID);
+        glBindBuffer(GL_ARRAY_BUFFER, data.ID);
         glBufferData(
             GL_ARRAY_BUFFER,
-            sizeof(float) * data.bufferData.array->size(),
-            data.bufferData.array->data(),
+            data.array->size() * sizeof(Vertex),
+            &data.array->at(0),
             GL_STATIC_DRAW
         );
 
-        int totalRange = 0;
-        for (int stride : data.strides)
-            totalRange += stride;
-
-        int offset = 0;
-        for (int i = 0; i < data.strides.size(); i++)
-        {
-            glVertexAttribPointer(
-                data.positions.at(i),
-                data.strides.at(i),
-                GL_FLOAT,
-                GL_FALSE,
-                totalRange * sizeof(float),
-                (void*)(offset * sizeof(float))
-            );
-            glEnableVertexAttribArray(data.positions.at(i));
-            offset += data.strides.at(i);
-        }
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::normal));
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::texCoord));
+        glEnableVertexAttribArray(2);
     }
         
     vaoMap[std::move(name)] = VAO;
@@ -79,7 +62,7 @@ void release(const std::string& name)
     }
     else
     {
-        std::cout << "KN::VAO::RELEASE::KEY_NOT_FOUND" << std::endl;
+        std::cout << "KN::VAO::RELEASE::KEY_NOT_FOUND::" << name << std::endl;
     }
 }
 

@@ -21,7 +21,7 @@ glm::vec2 getMouseRel()
     return {(float)x, (float)y};
 }
 
-const int getMouseButtonPressed()
+int getMouseButtonPressed()
 {
     return SDL_GetMouseState(nullptr, nullptr);
 }

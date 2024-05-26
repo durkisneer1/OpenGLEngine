@@ -1,9 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 #include <string>
 #include <memory>
+#include <glm/glm.hpp>
 
 namespace kn
 {

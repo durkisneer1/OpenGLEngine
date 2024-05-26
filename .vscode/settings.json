@@ -83,6 +83,7 @@
         "numbers": "cpp",
         "span": "cpp",
         "cinttypes": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "set": "cpp"
     }
 }

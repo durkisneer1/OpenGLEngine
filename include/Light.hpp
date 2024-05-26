@@ -1,11 +1,12 @@
 #pragma once
 
-#include <glm/glm.hpp>
 #include <memory>
-#include "Shader.hpp"
+#include <glm/glm.hpp>
 
 namespace kn
 {
+
+namespace shader { struct Shader; }
 
 class DirectionalLight
 {

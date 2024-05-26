@@ -1,4 +1,5 @@
 #include "Light.hpp"
+#include "Shader.hpp"
 
 namespace kn
 {

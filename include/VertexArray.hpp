@@ -10,14 +10,7 @@ namespace kn
 namespace vao
 {
 
-struct AttrData
-{
-    buffer::BufferData bufferData;
-    std::vector<int> strides;
-    std::vector<int> positions;
-};
-
-unsigned int generate(const std::string& name, const std::vector<AttrData>& attrData);
+unsigned int generate(const std::string& name, const std::vector<buffer::BufferData>& bufferDatas);
 
 unsigned int get(const std::string& name);
 

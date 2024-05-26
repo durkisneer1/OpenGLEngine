@@ -6,6 +6,7 @@
 #include "Cube.hpp"
 #include "Input.hpp"
 #include "Light.hpp"
+#include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "Time.hpp"

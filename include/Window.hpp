@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 
-#include <SDL.h>
-
 #include "Constants.hpp"
 
 

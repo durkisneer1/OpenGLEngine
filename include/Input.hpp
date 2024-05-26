@@ -14,7 +14,7 @@ glm::vec2 getMousePos();
 
 glm::vec2 getMouseRel();
 
-const int getMouseButtonPressed();
+int getMouseButtonPressed();
 
 const Uint8* getKeysPressed();
 

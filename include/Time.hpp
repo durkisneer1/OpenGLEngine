@@ -2,7 +2,6 @@
 
 #include <SDL.h>
 
-
 namespace kn {
 namespace time {
 

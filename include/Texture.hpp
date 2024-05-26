@@ -1,18 +1,32 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include "Constants.hpp"
 
 namespace kn
 {
+
+enum TextureType
+{
+    DIFFUSE,
+    SPECULAR
+};
+
 namespace texture
 {
 
-unsigned int load(const std::string& name, const std::string& path);
+struct Texture
+{
+    unsigned int id;
+    TextureType type;
+};
 
-unsigned int get(const std::string& name);
+std::shared_ptr<Texture> load(const std::string& name, TextureType textureType, const std::string& path);
 
-unsigned int create(const std::string& name, Color color);
+std::shared_ptr<Texture> get(const std::string& name);
+
+std::shared_ptr<Texture> create(const std::string& name, TextureType textureType, Color color);
 
 void release(const std::string& name);
 

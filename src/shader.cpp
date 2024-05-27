@@ -49,7 +49,7 @@ std::shared_ptr<Shader> get(const std::string& shaderName)
 std::shared_ptr<Shader> load(const std::string& dirPath, const std::string& shaderName)
 {
     auto it = shaderMap.find(shaderName);
-    if (it != shaderMap.end())
+    if (it != shaderMap.end() && it->second->path == dirPath)
         return it->second;
 
     std::string vertexCode;

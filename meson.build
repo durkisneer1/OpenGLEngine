@@ -26,6 +26,7 @@ executable(
     dependencies: [
         dependency('sdl2'),
         dependency('gl'),
-        dependency('glm')
+        dependency('glm'),
+        dependency('assimp')
     ]
 )

@@ -7,6 +7,7 @@
 #include "Input.hpp"
 #include "Light.hpp"
 #include "Mesh.hpp"
+#include "Model.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "Time.hpp"

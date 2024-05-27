@@ -1,1 +1,1 @@
-sources = ['src/buffer_object.cpp', 'src/camera.cpp', 'src/cube.cpp', 'src/input.cpp', 'src/light.cpp', 'src/mesh.cpp', 'src/shader.cpp', 'src/texture.cpp', 'src/time.cpp', 'src/vertex_array.cpp', 'src/window.cpp']
+sources = ['src/buffer_object.cpp', 'src/camera.cpp', 'src/cube.cpp', 'src/input.cpp', 'src/light.cpp', 'src/mesh.cpp', 'src/model.cpp', 'src/shader.cpp', 'src/texture.cpp', 'src/time.cpp', 'src/vertex_array.cpp', 'src/window.cpp']

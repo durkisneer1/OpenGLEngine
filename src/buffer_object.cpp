@@ -50,9 +50,7 @@ void release(const std::string& name)
 void releaseAll()
 {   
     for (const auto& pair : bufferMap)
-    {
         glDeleteBuffers(1, &pair.second.ID);
-    }
     bufferMap.clear();
 }
 

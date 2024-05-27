@@ -12,6 +12,7 @@ namespace shader
 struct Shader
 {
 	unsigned int ID;
+	std::string path;
 
 	void use();
 	void setBool(const std::string &name, bool value) const;

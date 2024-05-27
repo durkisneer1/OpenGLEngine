@@ -55,6 +55,9 @@ int main(int argc, char **argv)
     kn::Cube box;
     box.diffuse = boxDiffuse;
     box.specular = boxSpecular;
+    box.pos.y = -4.0f;
+
+    kn::Model backpack("../assets/backpack/backpack.obj");
 
     std::vector<kn::KEYS> forward = { kn::S_w, kn::S_UP };
     std::vector<kn::KEYS> right = { kn::S_d, kn::S_RIGHT };
@@ -89,6 +92,7 @@ int main(int argc, char **argv)
                 box.render();
             }
         }
+        backpack.render();
 
         kn::window::flip();
     }

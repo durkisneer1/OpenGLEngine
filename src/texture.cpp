@@ -15,7 +15,7 @@ static std::map<std::string, std::shared_ptr<Texture>> textureMap;
 std::shared_ptr<Texture> load(const std::string& name, TextureType textureType, const std::string& path)
 {
     auto it = textureMap.find(name);
-    if (it != textureMap.end())
+    if (it != textureMap.end() && it->second->path == path)
         return it->second;
 
     unsigned int texID;
@@ -39,11 +39,11 @@ std::shared_ptr<Texture> load(const std::string& name, TextureType textureType, 
     }
     else
     {
-        std::cout << "KN::TEXTURE::LOAD::FAILED" << std::endl;
+        std::cout << "KN::TEXTURE::LOAD::FAILED::" << path << "::" << name << std::endl;
     }
     stbi_image_free(data);
 
-    Texture texture{texID, textureType};
+    Texture texture{texID, textureType, path};
     auto texPtr = std::make_shared<Texture>(texture);
     textureMap[std::move(name)] = texPtr;
     return texPtr;
@@ -84,6 +84,11 @@ std::shared_ptr<Texture> get(const std::string& name)
         return it->second;
     else
         std::cout << "KN::TEXTURE::GET::TEXTURE_NOT_FOUND::" << name << std::endl;
+}
+
+unsigned int count()
+{
+    return textureMap.size();
 }
 
 void release(const std::string& name)

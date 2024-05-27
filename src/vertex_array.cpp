@@ -27,7 +27,7 @@ unsigned int generate(const std::string& name, const std::vector<buffer::BufferD
         glBufferData(
             GL_ARRAY_BUFFER,
             data.array->size() * sizeof(Vertex),
-            &data.array->at(0),
+            &(*data.array)[0],
             GL_STATIC_DRAW
         );
 
@@ -49,7 +49,7 @@ unsigned int get(const std::string& name)
     if (it != vaoMap.end())
         return it->second;
     else
-        return 0;
+        std::cout << "KN::VAO::GET::KEY_NOT_FOUND::" << name << std::endl;
 }
 
 void release(const std::string& name)

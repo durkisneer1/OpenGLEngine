@@ -38,7 +38,7 @@ void release(const std::string& shaderName)
 }
 
 std::shared_ptr<Shader> get(const std::string& shaderName)
-{   
+{
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end())
         return it->second;
@@ -64,7 +64,7 @@ std::shared_ptr<Shader> load(const std::string& dirPath, const std::string& shad
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
     try
-    {   
+    {
         // Open files
         vShaderFile.open(vertexPath);
         fShaderFile.open(fragmentPath);
@@ -113,7 +113,7 @@ std::shared_ptr<Shader> load(const std::string& dirPath, const std::string& shad
     }
 
     Shader shader;
-    
+
     shader.ID = glCreateProgram();
     glAttachShader(shader.ID, vertex);
     glAttachShader(shader.ID, fragment);

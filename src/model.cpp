@@ -15,7 +15,7 @@
 namespace kn
 {
 
-Model::Model(char* path)
+Model::Model(const std::string& path)
 {
     loadModel(path);
     shaderPtr = shader::get("default");
@@ -27,7 +27,8 @@ void Model::render()
     model *= glm::toMat4(glm::quat(glm::radians(rot)));
     model = glm::scale(model, scale);
     model = glm::translate(model, pos);
-    
+
+    shaderPtr->use();
     shaderPtr->setMat4("model", model);
     shaderPtr->setFloat("material.gloss", gloss);
 
@@ -106,22 +107,19 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
             indices.push_back(face.mIndices[j]);
     }
 
-    if (mesh->mMaterialIndex >= 0)
-    {
-        aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-        auto diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+    auto diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
+    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-        auto specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    }
+    auto specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR);
+    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
     return Mesh(vertices, indices, textures);
 }
 
 std::vector<std::shared_ptr<texture::Texture>> Model::loadMaterialTextures(
-    aiMaterial *mat, aiTextureType type, const std::string &typeName
+    aiMaterial *mat, aiTextureType type
 )
 {
     std::vector<std::shared_ptr<texture::Texture>> textures;

@@ -3,6 +3,7 @@
 #include "BufferObject.hpp"
 #include "VertexArray.hpp"
 #include "Texture.hpp"
+#include "Light.hpp"
 
 #include <glad/glad.h>
 #include <stb/stb_image.h>
@@ -25,7 +26,7 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
-    
+
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -62,7 +63,14 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
 
     stbi_set_flip_vertically_on_load(true);
 
-    shader::load("../shaders/", "default");
+    auto shaderPtr = shader::load("../shaders/", "default");
+
+    light::setShader(shaderPtr);
+    light::sun::setDirection({ 0.0f, -1.0f, 0.0f });
+    light::sun::setAmbient({ 0.1f, 0.1f, 0.1f });
+    light::sun::setDiffuse({ 0.5f, 0.5f, 0.5f });
+    light::sun::setSpecular({ 0.5f, 0.5f, 0.5f });
+
     texture::create("_k_diffuse_", kn::DIFFUSE, { 255, 255, 255, 255 });
     texture::create("_k_specular_", kn::SPECULAR, { 0, 0, 0, 255 });
 
@@ -183,7 +191,7 @@ int updateWindowCallback(void* data, Event* e)
     {
         quit();
     }
-        
+
     return 0;
 }
 

@@ -10,7 +10,6 @@ int main(int argc, char **argv)
     kn::time::Clock clock;
 
     auto shaderPtr = kn::shader::get("default");
-    shaderPtr->use();
 
     kn::Camera camera({ 3.0f, 3.0f, 6.0f }, 75.0f);
     camera.yaw = 270.0f;
@@ -25,29 +24,13 @@ int main(int argc, char **argv)
 
     for (int i = 0; i < 4; i++)
     {
-        std::string baseName = "pointLights[" + std::to_string(i) + "].";
-        shaderPtr->setVec3(baseName + "position", pointLightPositions[i]);
-        shaderPtr->setFloat(baseName + "constant", 1.0f);
-        shaderPtr->setFloat(baseName + "linear", 0.09f);
-        shaderPtr->setFloat(baseName + "quadratic", 0.032f);
-        shaderPtr->setVec3(baseName + "ambient", { 0.05f, 0.05f, 0.05f });
-        shaderPtr->setVec3(baseName + "diffuse", { 0.8f, 0.8f, 0.8f });
-        shaderPtr->setVec3(baseName + "specular", { 1.0f, 1.0f, 1.0f });
+        auto pointLight = kn::light::createPointLight();
+        pointLight->setPos(pointLightPositions[i]);
     }
 
-    kn::DirectionalLight sun;
-    sun.direction = { -0.3, -1.0, -0.2};
-    sun.diffuse = { 0.1, 0.2, 0.4 };
-    sun.update();
-
-    shaderPtr->setVec3("spotLight.ambient", { 0.0f, 0.0f, 0.0f });
-    shaderPtr->setVec3("spotLight.diffuse", { 1.0f, 1.0f, 1.0f });
-    shaderPtr->setVec3("spotLight.specular", { 1.0f, 1.0f, 1.0f });
-    shaderPtr->setFloat("spotLight.constant", 1.0f);
-    shaderPtr->setFloat("spotLight.linear", 0.09f);
-    shaderPtr->setFloat("spotLight.quadratic", 0.032f);
-    shaderPtr->setFloat("spotLight.cutOff", glm::cos(glm::radians(30.0f)));
-    shaderPtr->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(35.0f)));
+    auto flashlight = kn::light::createSpotLight();
+    flashlight->setCutOff(30.0f);
+    flashlight->setOuterCutOff(35.0f);
 
     auto boxDiffuse = kn::texture::load("box diffuse", kn::DIFFUSE, "../assets/container_diffuse.png");
     auto boxSpecular = kn::texture::load("box specular", kn::SPECULAR, "../assets/container_specular.png");
@@ -80,8 +63,8 @@ int main(int argc, char **argv)
             }
 
         kn::window::cls();
-        shaderPtr->setVec3("spotLight.position", camera.pos);
-        shaderPtr->setVec3("spotLight.direction", camera.front);
+        flashlight->setPos(camera.pos);
+        flashlight->setDir(camera.front);
 
         for (int z = -5; z < 6; z++)
         {
@@ -96,6 +79,6 @@ int main(int argc, char **argv)
 
         kn::window::flip();
     }
-    
+
     return EXIT_SUCCESS;
 }

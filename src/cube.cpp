@@ -67,6 +67,7 @@ Cube::Cube()
     );
 
     shaderPtr = shader::get("default");
+    shaderPtr->use();
     shaderPtr->setInt("material.diffuse", 0);
     shaderPtr->setInt("material.specular", 1);
     diffuse = texture::get("_k_diffuse_");
@@ -80,6 +81,7 @@ void Cube::render()
     model = glm::scale(model, scale);
     model = glm::translate(model, pos);
 
+    shaderPtr->use();
     shaderPtr->setMat4("model", model);
     shaderPtr->setFloat("material.gloss", gloss);
 

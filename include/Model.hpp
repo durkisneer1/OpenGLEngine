@@ -22,7 +22,7 @@ public:
     glm::vec3 rot = { 0.0f, 0.0f, 0.0f };
     float gloss = 32.0f;
 
-    Model(char* path);
+    Model(const std::string& path);
 
     void render();
 private:
@@ -33,7 +33,7 @@ private:
     void loadModel(const std::string& path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<std::shared_ptr<texture::Texture>> loadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName);
+    std::vector<std::shared_ptr<texture::Texture>> loadMaterialTextures(aiMaterial* mat, aiTextureType type);
 };
 
 }  // namespace kn

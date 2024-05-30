@@ -11,7 +11,7 @@ namespace vao
 
 static std::map<std::string, unsigned int> vaoMap;
 
-unsigned int generate(const std::string& name, const std::vector<buffer::BufferData>& bufferDatas)
+unsigned int generate(const std::string& name, const buffer::BufferData& buffer, const buffer::BufferData* indexBuffer)
 {
     auto it = vaoMap.find(name);
     if (it != vaoMap.end())
@@ -21,24 +21,32 @@ unsigned int generate(const std::string& name, const std::vector<buffer::BufferD
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    for (const buffer::BufferData& data : bufferDatas)
+    glBindBuffer(GL_ARRAY_BUFFER, buffer.ID);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        buffer.array->size() * sizeof(Vertex),
+        &(*buffer.array)[0],
+        GL_STATIC_DRAW
+    );
+
+    if (indexBuffer)
     {
-        glBindBuffer(GL_ARRAY_BUFFER, data.ID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->ID);
         glBufferData(
-            GL_ARRAY_BUFFER,
-            data.array->size() * sizeof(Vertex),
-            &(*data.array)[0],
+            GL_ELEMENT_ARRAY_BUFFER,
+            indexBuffer->array->size() * sizeof(unsigned int),
+            &(*indexBuffer->array)[0],
             GL_STATIC_DRAW
         );
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::normal));
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::texCoord));
-        glEnableVertexAttribArray(2);
     }
-        
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::normal));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::texCoord));
+    glEnableVertexAttribArray(2);
+
     vaoMap[std::move(name)] = VAO;
     return VAO;
 }

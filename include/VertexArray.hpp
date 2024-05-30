@@ -10,7 +10,7 @@ namespace kn
 namespace vao
 {
 
-unsigned int generate(const std::string& name, const std::vector<buffer::BufferData>& bufferDatas);
+unsigned int generate(const std::string& name, const buffer::BufferData& bufferDatas, const buffer::BufferData* indexBuffer = nullptr);
 
 unsigned int get(const std::string& name);
 

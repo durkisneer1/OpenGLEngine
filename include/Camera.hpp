@@ -7,7 +7,7 @@ namespace kn
 
 class Camera {
 public:
-    glm::vec3 pos;
+    glm::vec3 pos = { 0.0f, 0.0f, 0.0f };
     glm::vec3 front = { 0.0f, 0.0f, -1.0f };
     glm::vec3 up = { 0.0f, 1.0f, 0.0f };
     glm::vec3 right;
@@ -17,15 +17,15 @@ public:
     float pitch = 0.0f;
     float speed = 2.5f;
     float sens = 0.1f;
+    float fov = 75.0f;
 
-    Camera(glm::vec3 pos, float fov);
+    Camera();
     ~Camera() = default;
 
     void update(double deltaTime, const glm::vec2& movementVec);
     void look();
 
 private:
-    float fov;
     void updateVectors();
 };
 

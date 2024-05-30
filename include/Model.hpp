@@ -7,10 +7,11 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
+#include "Texture.hpp"
+
 namespace kn
 {
 
-namespace texture { struct Texture; }
 namespace shader { struct Shader; }
 class Mesh;
 
@@ -33,7 +34,7 @@ private:
     void loadModel(const std::string& path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<std::shared_ptr<texture::Texture>> loadMaterialTextures(aiMaterial* mat, aiTextureType type);
+    std::vector<std::shared_ptr<texture::Texture>> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType texType);
 };
 
 }  // namespace kn

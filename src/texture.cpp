@@ -1,4 +1,3 @@
-#include <map>
 #include <glad/glad.h>
 #include <iostream>
 #include <stb/stb_image.h>
@@ -10,12 +9,12 @@ namespace kn
 namespace texture
 {
 
-static std::map<std::string, std::shared_ptr<Texture>> textureMap;
+static std::map<std::string, std::shared_ptr<Texture>> _textureMap;
 
 std::shared_ptr<Texture> load(const std::string& name, TextureType textureType, const std::string& path)
 {
-    auto it = textureMap.find(name);
-    if (it != textureMap.end() && it->second->path == path)
+    auto it = _textureMap.find(name);
+    if (it != _textureMap.end() && it->second->path == path)
         return it->second;
 
     unsigned int texID;
@@ -28,7 +27,7 @@ std::shared_ptr<Texture> load(const std::string& name, TextureType textureType, 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int width, height, numChannels;
-    unsigned char *data = stbi_load(path.c_str(), &width, &height, &numChannels, 0); 
+    unsigned char *data = stbi_load(path.c_str(), &width, &height, &numChannels, 0);
     if (data != nullptr)
     {
         if (numChannels == 3)
@@ -45,14 +44,14 @@ std::shared_ptr<Texture> load(const std::string& name, TextureType textureType, 
 
     Texture texture{texID, textureType, path};
     auto texPtr = std::make_shared<Texture>(texture);
-    textureMap[std::move(name)] = texPtr;
+    _textureMap[std::move(name)] = texPtr;
     return texPtr;
 }
 
 std::shared_ptr<Texture> create(const std::string& name, TextureType textureType, Color color)
 {
-    auto it = textureMap.find(name);
-    if (it != textureMap.end())
+    auto it = _textureMap.find(name);
+    if (it != _textureMap.end())
         return it->second;
 
     unsigned int texID;
@@ -73,31 +72,31 @@ std::shared_ptr<Texture> create(const std::string& name, TextureType textureType
 
     Texture texture{texID, textureType};
     auto texPtr = std::make_shared<Texture>(texture);
-    textureMap[std::move(name)] = texPtr;
+    _textureMap[std::move(name)] = texPtr;
     return texPtr;
 }
 
 std::shared_ptr<Texture> get(const std::string& name)
 {
-    auto it = textureMap.find(name);
-    if (it != textureMap.end())
+    auto it = _textureMap.find(name);
+    if (it != _textureMap.end())
         return it->second;
     else
         std::cout << "KN::TEXTURE::GET::TEXTURE_NOT_FOUND::" << name << std::endl;
 }
 
-unsigned int count()
+const std::map<std::string, std::shared_ptr<Texture>>& getAll()
 {
-    return textureMap.size();
+    return _textureMap;
 }
 
 void release(const std::string& name)
 {
-    auto it = textureMap.find(name);
-    if (it != textureMap.end())
+    auto it = _textureMap.find(name);
+    if (it != _textureMap.end())
     {
         glDeleteTextures(1, &it->second->id);
-        textureMap.erase(it);
+        _textureMap.erase(it);
     }
     else
     {
@@ -107,9 +106,9 @@ void release(const std::string& name)
 
 void releaseAll()
 {
-    for (const auto& pair : textureMap)
+    for (const auto& pair : _textureMap)
         glDeleteTextures(1, &pair.second->id);
-    textureMap.clear();
+    _textureMap.clear();
 }
 
 }  // namespace texture

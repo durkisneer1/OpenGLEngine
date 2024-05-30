@@ -5,22 +5,28 @@
 
 #include "Constants.hpp"
 
-namespace kn
-{
-namespace input
-{
+namespace kn {
+namespace mouse {
 
-glm::vec2 getMousePos();
+glm::vec2 getPos();
 
-glm::vec2 getMouseRel();
+glm::vec2 getRel();
 
-int getMouseButtonPressed();
-
-const Uint8* getKeysPressed();
+int getPressed();
 
 void setRelativeMode(bool state);
 
 bool getRelativeMode();
+
+}  // namespace mouse
+
+namespace key {
+
+const Uint8* getPressed();
+
+}  // namespace key
+
+namespace input {
 
 glm::vec2 getVector(
     const std::vector<KEYS>& up = {}, const std::vector<KEYS>& right = {},

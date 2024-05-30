@@ -13,7 +13,7 @@ namespace kn
 
 static std::shared_ptr<shader::Shader> _shaderPtr = nullptr;
 
-Camera::Camera(glm::vec3 pos, float fov) : pos(pos), fov(fov)
+Camera::Camera()
 {
     _shaderPtr = kn::shader::get("default");
 }
@@ -38,7 +38,7 @@ void Camera::update(double deltaTime, const glm::vec2& movementVec)
 
 void Camera::look()
 {
-    glm::vec2 mouseRel = input::getMouseRel();
+    glm::vec2 mouseRel = mouse::getRel();
 
     yaw += mouseRel.x * sens;
     pitch -= mouseRel.y * sens;

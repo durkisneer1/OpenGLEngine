@@ -17,12 +17,12 @@ namespace window {
 static SDL_Window* _window;
 static SDL_GLContext _ctx;
 static bool _wireframeMode = false;
-static bool _running = true;
+static bool _open = true;
 static Event _event;
 static std::vector<SDL_Event> _events;
 
 
-void init(int screenWidth, int screenHeight, const std::string &windowTitle)
+void init(const glm::vec2& size, const std::string &windowTitle)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
@@ -38,7 +38,7 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
     _window = SDL_CreateWindow(
         windowTitle.c_str(),
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        screenWidth, screenHeight,
+        (int)size.x, (int)size.y,
         SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
     );
     if (_window == nullptr)
@@ -59,17 +59,17 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
         std::cout << "Failed to initialized GLAD" << std::endl;
 
     glEnable(GL_DEPTH_TEST);
-    glViewport(0, 0, screenWidth, screenHeight);
+    glViewport(0, 0, (int)size.x, (int)size.y);
 
     stbi_set_flip_vertically_on_load(true);
 
     auto shaderPtr = shader::load("../shaders/", "default");
 
     light::setShader(shaderPtr);
-    light::sun::setDirection({ 0.0f, -1.0f, 0.0f });
-    light::sun::setAmbient({ 0.1f, 0.1f, 0.1f });
-    light::sun::setDiffuse({ 0.5f, 0.5f, 0.5f });
-    light::sun::setSpecular({ 0.5f, 0.5f, 0.5f });
+    light::sun::setDir({ 0.0f, -1.0f, 0.0f });
+    light::sun::setAmbient(glm::vec3(0.1f));
+    light::sun::setDiffuse(glm::vec3(0.5f));
+    light::sun::setSpecular(glm::vec3(0.5f));
 
     texture::create("_k_diffuse_", kn::DIFFUSE, { 255, 255, 255, 255 });
     texture::create("_k_specular_", kn::SPECULAR, { 0, 0, 0, 255 });
@@ -79,13 +79,6 @@ void init(int screenWidth, int screenHeight, const std::string &windowTitle)
 
 const std::vector<SDL_Event>& getEvents()
 {
-    if (_window == nullptr)
-        std::cout << "Cannot get events before initializing the window" << std::endl;
-
-    _events.clear();
-    while (SDL_PollEvent(&_event))
-        _events.push_back(_event);
-
     return _events;
 }
 
@@ -114,7 +107,7 @@ int getHeight()
 
 void quit()
 {
-    _running = false;
+    _open = false;
 
     if (_ctx != nullptr)
         SDL_GL_DeleteContext(_ctx);
@@ -131,7 +124,7 @@ void quit()
         SDL_Quit();
 }
 
-void cls(Color color)
+void clear(Color color)
 {
     glClearColor(
         color.r / 255.0f,
@@ -175,12 +168,16 @@ std::string getTitle()
     return std::string(SDL_GetWindowTitle(_window));
 }
 
-bool isRunning()
+bool isOpen()
 {
-    return _running;
+    _events.clear();
+    while (SDL_PollEvent(&_event))
+        _events.push_back(_event);
+
+    return _open;
 }
 
-int updateWindowCallback(void* data, Event* e)
+int updateWindowCallback([[maybe_unused]] void* data, Event* e)
 {
     if (e->type == WINDOWEVENT)
     {

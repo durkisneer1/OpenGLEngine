@@ -53,7 +53,7 @@ private:
 
 namespace sun {
 
-void setDirection(const glm::vec3& dir);
+void setDir(const glm::vec3& dir);
 void setAmbient(const glm::vec3& ambient);
 void setDiffuse(const glm::vec3& diffuse);
 void setSpecular(const glm::vec3& specular);

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <glm/glm.hpp>
 
 #include "Constants.hpp"
 
@@ -11,7 +12,7 @@ namespace kn
 namespace window
 {
 
-void init(int screenWidth, int screenHeight, const std::string &windowTitle = "Kraken Window");
+void init(const glm::vec2& size, const std::string &windowTitle = "Kraken Window");
 
 void toggleWireframe();
 
@@ -23,7 +24,7 @@ void quit();
 
 const std::vector<SDL_Event>& getEvents();
 
-void cls(Color color = { 0, 0, 0, 255 });
+void clear(Color color = { 0, 0, 0, 255 });
 
 void flip();
 
@@ -31,7 +32,7 @@ void setTitle(const std::string& newTitle);
 
 std::string getTitle();
 
-bool isRunning();
+bool isOpen();
 
 int updateWindowCallback(void* data, Event* e);
 

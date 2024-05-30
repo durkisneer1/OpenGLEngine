@@ -1,6 +1,5 @@
 #include "BufferObject.hpp"
 
-#include <map>
 #include <glad/glad.h>
 #include <iostream>
 
@@ -9,25 +8,25 @@ namespace kn
 namespace buffer
 {
 
-static std::map<std::string, BufferData> bufferMap;
+static std::map<std::string, BufferData> _bufferMap;
 
 const BufferData& generate(const std::string& name, const std::vector<Vertex>& array)
 {
-    auto it = bufferMap.find(name);
-    if (it != bufferMap.end())
+    auto it = _bufferMap.find(name);
+    if (it != _bufferMap.end())
         return it->second;
 
     unsigned int buffer;
     glGenBuffers(1, &buffer);
 
-    bufferMap[std::move(name)] = BufferData{ buffer, &array };
-    return bufferMap[name];
+    _bufferMap[std::move(name)] = BufferData{ buffer, &array };
+    return _bufferMap[name];
 }
 
 const BufferData& get(const std::string& name)
 {
-    auto it = bufferMap.find(name);
-    if (it != bufferMap.end())
+    auto it = _bufferMap.find(name);
+    if (it != _bufferMap.end())
     {
         glDeleteBuffers(1, &it->second.ID);
         return it->second;
@@ -38,20 +37,25 @@ const BufferData& get(const std::string& name)
     }
 }
 
+const std::map<std::string, BufferData>& getAll()
+{
+    return _bufferMap;
+}
+
 void release(const std::string& name)
 {
-    auto it = bufferMap.find(name);
-    if (it != bufferMap.end())
-        bufferMap.erase(it);
+    auto it = _bufferMap.find(name);
+    if (it != _bufferMap.end())
+        _bufferMap.erase(it);
     else
         std::cout << "KN::BUFFER::RELEASE::KEY_NOT_FOUND::" << name << std::endl;
 }
 
 void releaseAll()
-{   
-    for (const auto& pair : bufferMap)
+{
+    for (const auto& pair : _bufferMap)
         glDeleteBuffers(1, &pair.second.ID);
-    bufferMap.clear();
+    _bufferMap.clear();
 }
 
 }  // namespace buffer

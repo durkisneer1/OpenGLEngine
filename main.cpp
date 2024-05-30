@@ -1,17 +1,15 @@
-#include <KrakenEngine.hpp>
-
-#include <vector>
 #include <iostream>
 
-int main(int argc, char **argv)
+#include <KrakenEngine.hpp>
+
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
-    kn::window::init(1200, 800, "DurkGL");
-    kn::input::setRelativeMode(true);
+    kn::window::init({ 1200, 800 }, "KrakenGL");
+    kn::mouse::setRelativeMode(true);
     kn::time::Clock clock;
 
-    auto shaderPtr = kn::shader::get("default");
-
-    kn::Camera camera({ 3.0f, 3.0f, 6.0f }, 75.0f);
+    kn::Camera camera;
+    camera.pos = { 3.0f, 3.0f, 6.0f };
     camera.yaw = 270.0f;
     camera.pitch = -35.0f;
 
@@ -21,11 +19,10 @@ int main(int argc, char **argv)
         glm::vec3(-4.0f,  2.0f, -12.0f),
         glm::vec3( 0.0f,  1.0f, -3.0f)
     };
-
-    for (int i = 0; i < 4; i++)
+    for (const auto& pos : pointLightPositions)
     {
         auto pointLight = kn::light::createPointLight();
-        pointLight->setPos(pointLightPositions[i]);
+        pointLight->setPos(pos);
     }
 
     auto flashlight = kn::light::createSpotLight();
@@ -47,7 +44,7 @@ int main(int argc, char **argv)
     std::vector<kn::KEYS> backward = { kn::S_s, kn::S_DOWN };
     std::vector<kn::KEYS> left = { kn::S_a, kn::S_LEFT };
 
-    while (kn::window::isRunning())
+    while (kn::window::isOpen())
     {
         double deltaTime = clock.tick(240);
         glm::vec2 inputDir = kn::input::getVector(forward, right, backward, left);
@@ -59,22 +56,22 @@ int main(int argc, char **argv)
                 if (e.key.keysym.sym == kn::K_ESCAPE)
                     kn::window::quit();
                 else if (e.key.keysym.sym == kn::K_r)
-                    kn::input::setRelativeMode(!kn::input::getRelativeMode());
+                    kn::mouse::setRelativeMode(!kn::mouse::getRelativeMode());
             }
 
-        kn::window::cls();
+        kn::window::clear();
+
         flashlight->setPos(camera.pos);
         flashlight->setDir(camera.front);
 
         for (int z = -5; z < 6; z++)
-        {
-            for (int x = -5; x < 5; x++)
+            for (int x = -5; x < 6; x++)
             {
                 box.pos.x = x * 2;
                 box.pos.z = z * 2;
                 box.render();
             }
-        }
+
         backpack.render();
 
         kn::window::flip();

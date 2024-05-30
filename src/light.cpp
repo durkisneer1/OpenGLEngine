@@ -176,7 +176,7 @@ void SpotLight::setOuterCutOff(float outerCutOff)
 
 namespace sun {
 
-void setDirection(const glm::vec3& dir)
+void setDir(const glm::vec3& dir)
 {
     _shaderPtr->use();
     _shaderPtr->setVec3("dirLight.direction", dir);

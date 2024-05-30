@@ -2,33 +2,26 @@
 #include <algorithm>
 #include <iostream>
 
-namespace kn
-{
-namespace input
-{
+namespace kn {
+namespace mouse {
 
-glm::vec2 getMousePos()
+glm::vec2 getPos()
 {
     int x, y;
     SDL_GetMouseState(&x, &y);
     return {(float)x, (float)y};
 }
 
-glm::vec2 getMouseRel()
+glm::vec2 getRel()
 {
     int x, y;
 	SDL_GetRelativeMouseState(&x, &y);
     return {(float)x, (float)y};
 }
 
-int getMouseButtonPressed()
+int getPressed()
 {
     return SDL_GetMouseState(nullptr, nullptr);
-}
-
-const Uint8* getKeysPressed()
-{
-    return SDL_GetKeyboardState(nullptr);
 }
 
 void setRelativeMode(bool state)
@@ -41,10 +34,23 @@ bool getRelativeMode()
     return SDL_GetRelativeMouseMode();
 }
 
+}  // namespace mouse
+
+namespace key {
+
+const Uint8* getPressed()
+{
+    return SDL_GetKeyboardState(nullptr);
+}
+
+}  // namespace key
+
+namespace input {
+
 glm::vec2 getVector(const std::vector<KEYS>& up, const std::vector<KEYS>& right,
                     const std::vector<KEYS>& down, const std::vector<KEYS>& left)
 {
-    const Uint8* keys = getKeysPressed();
+    const Uint8* keys = key::getPressed();
     glm::vec2 vector = glm::vec2(0.0f);
 
     if (std::any_of(up.begin(), up.end(), [&](auto scancode) { return keys[scancode]; }))

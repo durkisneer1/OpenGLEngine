@@ -60,10 +60,9 @@ static const std::vector<Vertex> vertices = {
 
 Cube::Cube()
 {
-    const auto& VBO = kn::buffer::generate("cube", vertices);
     VAO = kn::vao::generate(
         "cube",
-        { VBO }
+        kn::buffer::generate("cube", vertices)
     );
 
     shaderPtr = shader::get("default");

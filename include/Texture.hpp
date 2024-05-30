@@ -2,6 +2,8 @@
 
 #include <string>
 #include <memory>
+#include <map>
+
 #include "Constants.hpp"
 
 namespace kn
@@ -29,7 +31,7 @@ std::shared_ptr<Texture> get(const std::string& name);
 
 std::shared_ptr<Texture> create(const std::string& name, TextureType textureType, Color color);
 
-unsigned int count();
+const std::map<std::string, std::shared_ptr<Texture>>& getAll();
 
 void release(const std::string& name);
 

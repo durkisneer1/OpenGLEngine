@@ -109,17 +109,17 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-    auto diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
+    auto diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, DIFFUSE);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    auto specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR);
+    auto specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR);
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
     return Mesh(vertices, indices, textures);
 }
 
 std::vector<std::shared_ptr<texture::Texture>> Model::loadMaterialTextures(
-    aiMaterial *mat, aiTextureType type
+    aiMaterial *mat, aiTextureType type, TextureType texType
 )
 {
     std::vector<std::shared_ptr<texture::Texture>> textures;
@@ -127,8 +127,8 @@ std::vector<std::shared_ptr<texture::Texture>> Model::loadMaterialTextures(
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-        std::string fileName = std::string(str.C_Str());
-        auto texture = texture::load(fileName, kn::DIFFUSE, directory + "/" + fileName);
+        std::string indexName = directory + "/" + std::string(str.C_Str());
+        auto texture = texture::load(indexName, texType, indexName);
         textures.push_back(texture);
     }
     return textures;

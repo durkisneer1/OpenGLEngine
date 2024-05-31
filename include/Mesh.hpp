@@ -3,11 +3,11 @@
 #include <vector>
 #include <memory>
 
-namespace kn
-{
-
+namespace kn {
 namespace texture { struct Texture; }
 namespace shader { struct Shader; }
+namespace buffer { struct VertexData; struct IndexData; }
+
 struct Vertex;
 
 class Mesh
@@ -21,8 +21,11 @@ public:
     ~Mesh() = default;
 
     void render(std::shared_ptr<shader::Shader> shaderPtr);
+
 private:
-    unsigned int VAO, VBO, EBO;
+    unsigned int VAO;
+    std::shared_ptr<buffer::VertexData> VBO;
+    std::shared_ptr<buffer::IndexData> EBO;
 
     void setupMesh();
 };

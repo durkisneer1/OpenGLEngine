@@ -6,8 +6,7 @@
 
 #include "Constants.hpp"
 
-namespace kn
-{
+namespace kn {
 
 enum TextureType
 {
@@ -15,8 +14,7 @@ enum TextureType
     SPECULAR
 };
 
-namespace texture
-{
+namespace texture {
 
 struct Texture
 {

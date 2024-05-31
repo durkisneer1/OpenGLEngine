@@ -1,20 +1,17 @@
 #pragma once
 
-#include <string>
 #include <vector>
+#include <memory>
 
-#include "BufferObject.hpp"
+namespace kn {
+namespace buffer { struct VertexData; struct IndexData; }
+namespace vao {
 
-namespace kn
-{
-namespace vao
-{
+unsigned int generate(std::shared_ptr<buffer::VertexData> buffer, std::shared_ptr<buffer::IndexData> indexBuffer = nullptr);
 
-unsigned int generate(const std::string& name, const buffer::BufferData& bufferDatas, const buffer::BufferData* indexBuffer = nullptr);
+const std::vector<unsigned int>& getVAOs();
 
-unsigned int get(const std::string& name);
-
-void release(const std::string& name);
+void release(unsigned int vao);
 
 void releaseAll();
 

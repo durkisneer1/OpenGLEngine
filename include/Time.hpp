@@ -5,7 +5,8 @@
 namespace kn {
 namespace time {
 
-class Clock final {
+class Clock final
+{
 public:
     Clock() = default;
     ~Clock() = default;
@@ -23,5 +24,5 @@ private:
 
 double getTicks();
 
-}
-}
+}  // namespace time
+}  // namespace kn

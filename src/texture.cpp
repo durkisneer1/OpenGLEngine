@@ -4,10 +4,8 @@
 
 #include "Texture.hpp"
 
-namespace kn
-{
-namespace texture
-{
+namespace kn {
+namespace texture {
 
 static std::map<std::string, std::shared_ptr<Texture>> _textureMap;
 

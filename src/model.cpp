@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 
 #include <assimp/postprocess.h>
 #include <stb/stb_image.h>
@@ -12,12 +13,27 @@
 #include "Texture.hpp"
 #include "Shader.hpp"
 
-namespace kn
-{
+namespace kn {
+
+static std::map<std::string, std::vector<Mesh>* > modelCache;
 
 Model::Model(const std::string& path)
 {
+    if (path.empty())
+    {
+        std::cout << "KN::MODEL::EMPTY_PATH" << std::endl;
+        return;
+    }
+    directory = path.substr(0, path.find_last_of('/'));
+    if (modelCache.find(path) != modelCache.end())
+    {
+        meshes = *modelCache[path];
+        shaderPtr = shader::get("default");
+        return;
+    }
+
     loadModel(path);
+    modelCache[path] = &meshes;
     shaderPtr = shader::get("default");
 }
 
@@ -47,7 +63,6 @@ void Model::loadModel(const std::string& path)
         return;
     }
 
-    directory = path.substr(0, path.find_last_of('/'));
     processNode(scene->mRootNode, scene);
 }
 

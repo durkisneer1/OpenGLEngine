@@ -1,61 +1,76 @@
+#include <glad/glad.h>
+#include <algorithm>
+
 #include "BufferObject.hpp"
 
-#include <glad/glad.h>
-#include <iostream>
+namespace kn {
+namespace buffer {
 
-namespace kn
+static std::vector<std::shared_ptr<VertexData>> _vertexBuffers;
+
+static std::vector<std::shared_ptr<IndexData>> _indexBuffers;
+
+std::shared_ptr<VertexData> generate(const std::vector<Vertex>& array)
 {
-namespace buffer
-{
-
-static std::map<std::string, BufferData> _bufferMap;
-
-const BufferData& generate(const std::string& name, const std::vector<Vertex>& array)
-{
-    auto it = _bufferMap.find(name);
-    if (it != _bufferMap.end())
-        return it->second;
-
     unsigned int buffer;
     glGenBuffers(1, &buffer);
 
-    _bufferMap[std::move(name)] = BufferData{ buffer, &array };
-    return _bufferMap[name];
+    VertexData data = { buffer, &array };
+    auto ptr = std::make_shared<VertexData>(data);
+    _vertexBuffers.push_back(ptr);
+    return ptr;
 }
 
-const BufferData& get(const std::string& name)
+std::shared_ptr<IndexData> generate(const std::vector<unsigned int>& array)
 {
-    auto it = _bufferMap.find(name);
-    if (it != _bufferMap.end())
-    {
-        glDeleteBuffers(1, &it->second.ID);
-        return it->second;
-    }
-    else
-    {
-        std::cout << "KN::BUFFER::GET::KEY_NOT_FOUND::" << name << std::endl;
-    }
+    unsigned int buffer;
+    glGenBuffers(1, &buffer);
+
+    IndexData data = { buffer, &array };
+    auto ptr = std::make_shared<IndexData>(data);
+    _indexBuffers.push_back(ptr);
+    return ptr;
 }
 
-const std::map<std::string, BufferData>& getAll()
+const std::vector<std::shared_ptr<VertexData>>& getVertexDatas()
 {
-    return _bufferMap;
+    return _vertexBuffers;
 }
 
-void release(const std::string& name)
+const std::vector<std::shared_ptr<IndexData>>& getIndexDatas()
 {
-    auto it = _bufferMap.find(name);
-    if (it != _bufferMap.end())
-        _bufferMap.erase(it);
-    else
-        std::cout << "KN::BUFFER::RELEASE::KEY_NOT_FOUND::" << name << std::endl;
+    return _indexBuffers;
+}
+
+void release(std::shared_ptr<VertexData> buffer)
+{
+    glDeleteBuffers(1, &buffer->ID);
+    delete buffer->array;
+    _vertexBuffers.erase(std::remove(_vertexBuffers.begin(), _vertexBuffers.end(), buffer), _vertexBuffers.end());
+}
+
+void release(std::shared_ptr<IndexData> buffer)
+{
+    glDeleteBuffers(1, &buffer->ID);
+    delete buffer->array;
+    _indexBuffers.erase(std::remove(_indexBuffers.begin(), _indexBuffers.end(), buffer), _indexBuffers.end());
 }
 
 void releaseAll()
 {
-    for (const auto& pair : _bufferMap)
-        glDeleteBuffers(1, &pair.second.ID);
-    _bufferMap.clear();
+    for (auto& buffer : _vertexBuffers)
+    {
+        glDeleteBuffers(1, &buffer->ID);
+        delete buffer->array;
+    }
+    _vertexBuffers.clear();
+
+    for (auto& buffer : _indexBuffers)
+    {
+        glDeleteBuffers(1, &buffer->ID);
+        delete buffer->array;
+    }
+    _indexBuffers.clear();
 }
 
 }  // namespace buffer

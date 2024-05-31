@@ -1,7 +1,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <glad/glad.h>
-#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -11,8 +10,7 @@
 #include "VertexArray.hpp"
 #include "BufferObject.hpp"
 
-namespace kn
-{
+namespace kn {
 
 static const std::vector<Vertex> vertices = {
     {{ -1.0f, -1.0f, -1.0f },  { 0.0f, 0.0f, -1.0f },  { 0.0f, 0.0f }},
@@ -58,17 +56,24 @@ static const std::vector<Vertex> vertices = {
     {{ -1.0f, 1.0f, -1.0f },  { 0.0f, 1.0f, 0.0f },  { 0.0f, 1.0f }}
 };
 
+static std::shared_ptr<shader::Shader> _shaderPtr;
+
+static std::shared_ptr<buffer::VertexData> _vboPtr;
+
+static unsigned int _vao;
+
 Cube::Cube()
 {
-    VAO = kn::vao::generate(
-        "cube",
-        kn::buffer::generate("cube", vertices)
-    );
+    if (!_vboPtr)
+        _vboPtr = buffer::generate(vertices);
+    if (_vao == 0)
+        _vao = vao::generate(_vboPtr);
+    if (!_shaderPtr)
+        _shaderPtr = shader::get("default");
 
-    shaderPtr = shader::get("default");
-    shaderPtr->use();
-    shaderPtr->setInt("material.diffuse", 0);
-    shaderPtr->setInt("material.specular", 1);
+    _shaderPtr->use();
+    _shaderPtr->setInt("material.diffuse", 0);
+    _shaderPtr->setInt("material.specular", 1);
     diffuse = texture::get("_k_diffuse_");
     specular = texture::get("_k_specular_");
 }
@@ -80,15 +85,15 @@ void Cube::render()
     model = glm::scale(model, scale);
     model = glm::translate(model, pos);
 
-    shaderPtr->use();
-    shaderPtr->setMat4("model", model);
-    shaderPtr->setFloat("material.gloss", gloss);
+    _shaderPtr->use();
+    _shaderPtr->setMat4("model", model);
+    _shaderPtr->setFloat("material.gloss", gloss);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffuse->id);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, specular->id);
-    glBindVertexArray(VAO);
+    glBindVertexArray(_vao);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 

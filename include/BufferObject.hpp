@@ -1,14 +1,11 @@
 #pragma once
 
-#include <string>
 #include <vector>
-#include <functional>
-#include <map>
+#include <memory>
 
 #include <glm/glm.hpp>
 
-namespace kn
-{
+namespace kn {
 
 struct Vertex
 {
@@ -17,22 +14,31 @@ struct Vertex
     glm::vec2 texCoord;
 };
 
-namespace buffer
-{
+namespace buffer {
 
-struct BufferData
+struct VertexData
 {
     unsigned int ID;
     const std::vector<Vertex>* array;
 };
 
-const BufferData& generate(const std::string& name, const std::vector<Vertex>& array);
+struct IndexData
+{
+    unsigned int ID;
+    const std::vector<unsigned int>* array;
+};
 
-const BufferData& get(const std::string& name);
+std::shared_ptr<VertexData> generate(const std::vector<Vertex>& array);
 
-const std::map<std::string, BufferData>& getAll();
+std::shared_ptr<IndexData> generate(const std::vector<unsigned int>& array);
 
-void release(const std::string& name);
+const std::vector<std::shared_ptr<VertexData>>& getVertexDatas();
+
+const std::vector<std::shared_ptr<IndexData>>& getIndexDatas();
+
+void release(std::shared_ptr<VertexData> buffer);
+
+void release(std::shared_ptr<IndexData> buffer);
 
 void releaseAll();
 

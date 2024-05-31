@@ -9,10 +9,9 @@
 
 #include "Texture.hpp"
 
-namespace kn
-{
-
+namespace kn {
 namespace shader { struct Shader; }
+
 class Mesh;
 
 class Model
@@ -24,8 +23,10 @@ public:
     float gloss = 32.0f;
 
     Model(const std::string& path);
+    ~Model() = default;
 
     void render();
+
 private:
     std::vector<Mesh> meshes;
     std::string directory;

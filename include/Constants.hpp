@@ -2,8 +2,8 @@
 
 #include <SDL.h>
 
-namespace kn
-{
+namespace kn {
+
 typedef SDL_Scancode KEYS;
 typedef SDL_Event Event;
 typedef SDL_Color Color;

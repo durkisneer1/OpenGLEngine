@@ -2,10 +2,10 @@
 
 #include <glm/glm.hpp>
 
-namespace kn
-{
+namespace kn {
 
-class Camera {
+class Camera
+{
 public:
     glm::vec3 pos = { 0.0f, 0.0f, 0.0f };
     glm::vec3 front = { 0.0f, 0.0f, -1.0f };

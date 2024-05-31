@@ -8,18 +8,15 @@
 #include <iostream>
 #include <map>
 
-namespace kn
-{
-namespace shader
-{
+namespace kn {
+namespace shader {
 
 static std::map<std::string, std::shared_ptr<Shader>> shaderMap;
 
 void releaseAll()
 {
-    for (const auto& pair : shaderMap) {
+    for (const auto& pair : shaderMap)
         glDeleteProgram(pair.second->ID);
-    }
     shaderMap.clear();
 }
 

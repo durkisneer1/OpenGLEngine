@@ -6,11 +6,8 @@
 
 #include "Constants.hpp"
 
-
-namespace kn
-{
-namespace window
-{
+namespace kn {
+namespace window {
 
 void init(const glm::vec2& size, const std::string &windowTitle = "Kraken Window");
 

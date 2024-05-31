@@ -7,9 +7,7 @@
 #include <SDL.h>
 #include <iostream>
 
-
-namespace kn
-{
+namespace kn {
 
 static std::shared_ptr<shader::Shader> _shaderPtr = nullptr;
 

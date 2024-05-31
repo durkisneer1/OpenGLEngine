@@ -10,7 +10,6 @@
 
 #include <iostream>
 
-
 namespace kn {
 namespace window {
 
@@ -20,7 +19,6 @@ static bool _wireframeMode = false;
 static bool _open = true;
 static Event _event;
 static std::vector<SDL_Event> _events;
-
 
 void init(const glm::vec2& size, const std::string &windowTitle)
 {
@@ -143,7 +141,10 @@ void flip()
 void setTitle(const std::string& newTitle)
 {
     if (_window == nullptr)
+    {
         std::cout << "Cannot set title before creating the window" << std::endl;
+        return;
+    }
 
     if (newTitle.empty())
     {

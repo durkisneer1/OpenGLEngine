@@ -1,6 +1,5 @@
 #include "Time.hpp"
 
-
 namespace kn {
 namespace time {
 
